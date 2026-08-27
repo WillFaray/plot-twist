@@ -2,59 +2,73 @@
 layout: default
 ---
 {%- comment -%}
-  Builds an index of all distinct genres across the post collection,
-  with a chip for each. Each chip links to the filtered list below.
+  Genre browser. Shows a dropdown with the most common TMDB genres; selecting
+  one jumps to that genre's section further down. Sections that have no
+  reviews are hidden entirely.
 {%- endcomment -%}
-{%- assign genre_map = "" | split: "" -%}
-{%- assign seen = "" | split: "" -%}
 {%- assign all_movies = site.posts | where_exp: "p", "p.layout == 'movie'" -%}
+{%- assign available = '' | genre_bucket -%}
 
-{%- comment -%} First pass: build a hash of genre => [posts] via capture {%- endcomment -%}
-{%- assign genre_data = "" -%}
-{%- for post in all_movies -%}
-  {%- assign tg = post.tmdb.genres | default: empty -%}
-  {%- for g in tg -%}
-    {%- assign key = g | slugify -%}
-    {%- assign existing = site.data.genres[key] | default: empty -%}
-  {%- endfor -%}
-{%- endfor -%}
-
-{%- comment -%} Easier: build the data file at build time using the existing plugin. {%- endcomment -%}
 <div class="container">
-  <section class="hero" style="padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--border);">
-    <h1 style="font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 .35rem;">Browse by genre</h1>
-    <p class="lead" style="margin: 0;">Pick a genre and jump straight to the reviews inside it.</p>
-  </section>
+  <header class="page-head">
+    <h1>Browse by genre</h1>
+    <p class="text-muted">Pick a genre and jump straight to the reviews inside it.</p>
+  </header>
 
-  {%- if site.data.genres -%}
-    <div class="genre-cloud mt-3">
-      {%- assign sorted = site.data.genres | sort -%}
-      {%- for entry in sorted -%}
-        {%- assign slug = entry[0] -%}
-        {%- assign info = entry[1] -%}
-        <a class="genre-chip" href="#{{ slug }}" id="{{ slug }}">
-          {{ info.name }}
-          <span class="count">· {{ info.count }}</span>
-        </a>
-      {%- endfor -%}
-    </div>
+  {%- if site.genres.common and site.genres.common.size > 0 -%}
+    {%- comment -%} Build the dropdown items. Show every common genre, but
+       tag the ones that don't have any review so they get disabled. {%- endcomment -%}
+    <details class="genre-dropdown" open>
+      <summary>
+        <span>Genres</span>
+        <span class="chev" aria-hidden="true">▾</span>
+      </summary>
+      <ul class="genre-list" role="list">
+        {%- for g in site.genres.common -%}
+          {%- assign slug = g.name | slugify -%}
+          {%- assign info = available[slug] | default: empty -%}
+          {%- assign count = info.count | default: 0 -%}
+          <li>
+            {%- if count > 0 -%}
+              <a href="#{{ slug }}">
+                <span>{{ g.name }}</span>
+                <span class="count">{{ count }} review{{ count | pluralize: "", "s" }}</span>
+              </a>
+            {%- else -%}
+              <span class="disabled" title="No reviews in this genre yet">
+                <span>{{ g.name }}</span>
+                <span class="count">—</span>
+              </span>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </details>
+  {%- endif -%}
 
+  {%- if available and available.size > 0 -%}
+    {%- assign sorted = available | sort -%}
     {%- for entry in sorted -%}
       {%- assign slug = entry[0] -%}
       {%- assign info = entry[1] -%}
-      <section class="mt-4">
-        <h2 class="section-head" style="margin-top: 2rem;">
-          <span>{{ info.name }}</span>
-          <span class="sub">{{ info.count }} review{{ info.count | pluralize: "", "s" }}</span>
-        </h2>
-        <div class="movie-grid">
-          {%- for post in info.posts -%}
-            {% include movie-card.html post=post %}
-          {%- endfor -%}
+      <section class="genre-section" id="{{ slug }}">
+        <div class="section-head">
+          <div>
+            <h2>{{ info.name }}</h2>
+            <div class="sub">Anchored at #{{ slug }}</div>
+          </div>
+          <a class="btn btn-ghost" href="{{ '/movies/' | relative_url }}">See all reviews →</a>
         </div>
+
+        <ul class="movie-list" role="list">
+          {%- for post in info.posts -%}
+            <li>{% include movie-list-item.html post=post %}</li>
+          {%- endfor -%}
+        </ul>
       </section>
     {%- endfor -%}
   {%- else -%}
     <p class="text-muted mt-4">No genre data yet. Add a few movie reviews and rebuild.</p>
   {%- endif -%}
 </div>
+

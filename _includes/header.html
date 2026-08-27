@@ -4,12 +4,32 @@
       <span class="brand-mark">PT</span>
       <span class="brand-name">Plot<span>Twist</span></span>
     </a>
+    {%- assign available = '' | genre_bucket -%}
     <nav class="nav" id="primary-nav" aria-label="Primary">
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
       <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' %}class="active"{% endif %}>Filmes</a>
-      <a href="{{ '/genres/' | relative_url }}" {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</a>
+
+      <details class="genre-dropdown" {% if page.url contains '/genres' %}open{% endif %}>
+        <summary {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</summary>
+        <div class="menu" role="menu">
+          <a href="{{ '/genres/' | relative_url }}">All genres →</a>
+          {%- if site.genres.common and site.genres.common.size > 0 -%}
+            {%- for g in site.genres.common -%}
+              {%- assign slug = g.name | slugify -%}
+              {%- assign info = available[slug] | default: empty -%}
+              {%- assign count = info.count | default: 0 -%}
+              <a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">
+                <span>{{ g.name }}</span>
+                {%- if count > 0 %}<span class="count">{{ count }}</span>{%- endif -%}
+              </a>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </details>
+
       <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>Sobre</a>
     </nav>
     <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav" onclick="var n=document.getElementById('primary-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o);">☰</button>
   </div>
 </header>
+

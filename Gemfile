@@ -3,6 +3,9 @@ source "https://rubygems.org"
 # Jekyll core
 gem "jekyll", "~> 4.4.1"
 
+# .env loader — reads TMDB_API_KEY from .env at build time
+gem "dotenv", "~> 3.1"
+
 # Plugins
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"

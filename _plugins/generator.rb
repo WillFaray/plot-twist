@@ -77,19 +77,32 @@ end
 #  collection and build a slug => { name, count, posts: [...] }
 #  hash that the /genres/ layout consumes.
 # =============================================================
-Jekyll::Hooks.register :site, :post_read do |site|
-  bucket = {}
-  site.posts.each do |post|
-    next unless post.data["layout"] == "movie"
-    genres = post.data.dig("tmdb", "genres") || []
-    genres.each do |g|
-      slug = g.to_s.downcase.strip
-      next if slug.empty?
-      bucket[slug] ||= { "name" => g, "count" => 0, "posts" => [] }
-      bucket[slug]["count"] += 1
-      # Store the post reference; Jekyll can resolve these in templates.
-      bucket[slug]["posts"] << post
+# ---- Liquid filter: build a genre bucket on demand ---------------------------
+# Walks all posts and groups them by their TMDB genre. This is the single
+# source of truth for the genre dropdowns in the header and the /genres/
+# page, and it runs lazily inside the template, so it always sees the
+# enriched `tmdb` data populated by `_plugins/tmdb.rb`.
+module Jekyll
+  module GenreFilter
+    # Accept an optional input so it can be used as either
+    #   {{ '' | genre_bucket }}        # output piped in (ignored)
+    #   {% assign g = genre_bucket %}  # bare call (Jekyll 4 supports this)
+    def genre_bucket(input = nil)
+      _ = input
+      bucket = {}
+      @context.registers[:site].posts.docs.each do |post|
+        next unless post.data["layout"] == "movie"
+        genres = post.data.dig("tmdb", "genres") || []
+        genres.each do |g|
+          slug = g.to_s.downcase.strip.gsub(/[^a-z0-9]+/, "-").gsub(/(^-|-$)/, "")
+          next if slug.empty?
+          bucket[slug] ||= { "name" => g, "count" => 0, "posts" => [] }
+          bucket[slug]["count"] += 1
+          bucket[slug]["posts"] << post
+        end
+      end
+      bucket
     end
   end
-  site.data["genres"] = bucket
 end
+Liquid::Template.register_filter(Jekyll::GenreFilter)
