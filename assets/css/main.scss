@@ -28,7 +28,6 @@
   --header-bg:     #2a2a2a;
   --header-hover: #3a3a3a;
   --header-border:#1a1a1a;
-  --topbar-bg:    #f7931a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -50,7 +49,6 @@
     --header-bg:     #1a1a1a;
     --header-hover: #2a2a2a;
     --header-border:#000000;
-    --topbar-bg:    #f7931a;
   }
 }
 
@@ -72,7 +70,6 @@
   --header-bg:     #1a1a1a;
   --header-hover: #2a2a2a;
   --header-border:#000000;
-  --topbar-bg:    #f7931a;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -138,26 +135,11 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 
 /* ---------- Header / nav (bitcoin.org style) ----------
    The pattern is:
-     .topbar           → thin top strip (orange, full width)
      .site-header      → dark band with logo on the left and
                          horizontally centered nav
-     .nav-dropdown     → <details>/<summary> dropdown
+     .nav-dropdown     → <li> with hover dropdown
      .nav-dropdown-menu→ menu panel, same dark bg, lighter hover
 */
-
-.topbar {
-  background: var(--topbar-bg);
-  color: #fff;
-  font-size: 0.85rem;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-.topbar-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  height: 30px; gap: 1rem;
-}
-.topbar-text { color: #fff; opacity: 0.95; }
-.topbar-link { color: #fff; border-bottom: 0; font-weight: 600; }
-.topbar-link:hover { color: #fff; border-bottom: 1px solid #fff; }
 
 .site-header {
   background: var(--header-bg);
@@ -279,7 +261,6 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   align-self: center;
 }
 @media (max-width: 760px) {
-  .topbar-inner { font-size: 0.78rem; }
   .nav { display: none; }
   .nav.open {
     display: flex; flex-direction: column; align-items: stretch;
