@@ -15,27 +15,17 @@
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
       <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' and page.url != '/movies/' %}class="active"{% endif %}>Filmes</a>
 
-      <details class="nav-dropdown" {% if page.url contains '/genres' %}open{% endif %}>
-        <summary {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</summary>
-        <div class="nav-dropdown-menu" role="menu">
-          <a href="{{ '/genres/' | relative_url }}" class="ddm-all">All genres →</a>
-          <ul class="ddm-list">
-            {%- if site.genres.common and site.genres.common.size > 0 -%}
-              {%- for g in site.genres.common -%}
-                {%- assign slug = g.name | slugify -%}
-                {%- assign info = available[slug] | default: empty -%}
-                {%- assign count = info.count | default: 0 -%}
-                <li>
-                  <a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">
-                    <span class="ddm-name">{{ g.name }}</span>
-                    {%- if count > 0 %}<span class="ddm-count">{{ count }}</span>{%- endif -%}
-                  </a>
-                </li>
-              {%- endfor -%}
-            {%- endif -%}
-          </ul>
-        </div>
-      </details>
+      <li class="nav-dropdown">
+        <a href="{{ '/genres/' | relative_url }}" {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</a>
+        <ul class="nav-dropdown-menu" role="menu">
+          {%- if site.genres.common and site.genres.common.size > 0 -%}
+            {%- for g in site.genres.common -%}
+              {%- assign slug = g.name | slugify -%}
+              <li><a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">{{ g.name }}</a></li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </li>
 
       <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>Sobre</a>
     </nav>
