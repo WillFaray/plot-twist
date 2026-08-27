@@ -1,29 +1,39 @@
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span class="topbar-text">🎬 Um diário de reviews em inglês</span>
+    <a class="topbar-link" href="{{ '/feed.xml' | relative_url }}">RSS</a>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="container">
     <a class="brand" href="{{ '/' | relative_url }}">
-      <span class="brand-mark">PT</span>
       <span class="brand-name">Plot<span>Twist</span></span>
     </a>
     {%- assign available = '' | genre_bucket -%}
     <nav class="nav" id="primary-nav" aria-label="Primary">
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
-      <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' %}class="active"{% endif %}>Filmes</a>
+      <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' and page.url != '/movies/' %}class="active"{% endif %}>Filmes</a>
 
-      <details class="genre-dropdown" {% if page.url contains '/genres' %}open{% endif %}>
+      <details class="nav-dropdown" {% if page.url contains '/genres' %}open{% endif %}>
         <summary {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</summary>
-        <div class="menu" role="menu">
-          <a href="{{ '/genres/' | relative_url }}">All genres →</a>
-          {%- if site.genres.common and site.genres.common.size > 0 -%}
-            {%- for g in site.genres.common -%}
-              {%- assign slug = g.name | slugify -%}
-              {%- assign info = available[slug] | default: empty -%}
-              {%- assign count = info.count | default: 0 -%}
-              <a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">
-                <span>{{ g.name }}</span>
-                {%- if count > 0 %}<span class="count">{{ count }}</span>{%- endif -%}
-              </a>
-            {%- endfor -%}
-          {%- endif -%}
+        <div class="nav-dropdown-menu" role="menu">
+          <a href="{{ '/genres/' | relative_url }}" class="ddm-all">All genres →</a>
+          <ul class="ddm-list">
+            {%- if site.genres.common and site.genres.common.size > 0 -%}
+              {%- for g in site.genres.common -%}
+                {%- assign slug = g.name | slugify -%}
+                {%- assign info = available[slug] | default: empty -%}
+                {%- assign count = info.count | default: 0 -%}
+                <li>
+                  <a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">
+                    <span class="ddm-name">{{ g.name }}</span>
+                    {%- if count > 0 %}<span class="ddm-count">{{ count }}</span>{%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            {%- endif -%}
+          </ul>
         </div>
       </details>
 
