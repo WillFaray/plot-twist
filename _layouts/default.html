@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: site.title }}</title>
+    <!-- Aqui você vai colocar o link do seu CSS depois -->
+</head>
+
+<body>
+    <header>
+        <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+        <nav>
+            <a href="{{ '/' | relative_url }}">Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- A mágica acontece aqui: o conteúdo das páginas será injetado nesta tag -->
+        {{ content }}
+    </main>
+
+    <footer>
+        <p>Movie Reviews for Instrumental English Class</p>
+    </footer>
+</body>
+
+</html>

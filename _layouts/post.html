@@ -1,0 +1,14 @@
+---
+layout: default
+---
+<article class="movie-review">
+    <header>
+        <h2>{{ page.title }}</h2>
+        <p><strong>Date:</strong> {{ page.date | date: "%B %d, %Y" }}</p>
+        <p><strong>Director:</strong> {{ page.director }} | <strong>Rating:</strong> {{ page.rating }}</p>
+    </header>
+
+    <div class="review-content">
+        {{ content }}
+    </div>
+</article>
