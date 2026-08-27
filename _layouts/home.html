@@ -1,0 +1,38 @@
+---
+layout: default
+---
+{%- assign all_movies = site.posts | where_exp: "p", "p.layout == 'movie'" -%}
+<section class="hero">
+  <div class="container">
+    <h1>Movie reviews, <em>rewatched</em>.</h1>
+    <p class="lead">
+      A small, opinionated library of film reviews written in English for our
+      Instrumental English class. Plot twists welcome.
+    </p>
+    <div class="cta-row">
+      <a class="btn" href="{{ '/movies/' | relative_url }}">Browse all reviews</a>
+      <a class="btn btn-ghost" href="{{ '/genres/' | relative_url }}">Browse by genre</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  {%- if all_movies.size > 0 -%}
+    <div class="section-head">
+      <div>
+        <h2>Latest reviews</h2>
+        <div class="sub">{{ all_movies.size }} film{{ all_movies.size | pluralize: "", "s" }} reviewed so far</div>
+      </div>
+      <a class="btn btn-ghost" href="{{ '/movies/' | relative_url }}">See all →</a>
+    </div>
+
+    <div class="movie-grid">
+      {%- for post in all_movies limit:6 -%}
+        {% include movie-card.html post=post %}
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div class="section-head"><h2>No reviews yet</h2></div>
+    <p class="text-muted">Add a markdown file in <code>_posts/</code> to publish your first review.</p>
+  {%- endif -%}
+</div>

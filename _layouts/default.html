@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="{{ site.lang | default: 'en' }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title | default: site.title }}</title>
-    <!-- Aqui você vai colocar o link do seu CSS depois -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- comment -%} jekyll-seo-tag generates <title> and meta description for us. {%- endcomment -%}
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23ffb800%22/><text x=%2250%22 y=%2266%22 font-family=%22sans-serif%22 font-size=%2256%22 font-weight=%22900%22 text-anchor=%22middle%22 fill=%22%23111%22>PT</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  {%- feed_meta -%}
+  {%- seo -%}
 </head>
-
 <body>
-    <header>
-        <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
-        <nav>
-            <a href="{{ '/' | relative_url }}">Home</a>
-        </nav>
-    </header>
-
-    <main>
-        <!-- A mágica acontece aqui: o conteúdo das páginas será injetado nesta tag -->
-        {{ content }}
-    </main>
-
-    <footer>
-        <p>Movie Reviews for Instrumental English Class</p>
-    </footer>
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% include header.html %}
+  <main id="main">
+    {{ content }}
+  </main>
+  {% include footer.html %}
 </body>
-
 </html>

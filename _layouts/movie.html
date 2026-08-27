@@ -1,0 +1,98 @@
+---
+layout: default
+---
+{%- assign tmdb = page.tmdb | default: empty -%}
+{%- assign fallback_poster = '/assets/images/poster-placeholder.svg' | relative_url -%}
+
+<article class="container movie-review">
+
+  {%- comment -%} Backdrop hero with title overlay {%- endcomment -%}
+  <div class="backdrop">
+    {%- if tmdb.backdrop and tmdb.backdrop != "" -%}
+      <img src="{{ tmdb.backdrop | relative_url }}" alt="" loading="lazy">
+    {%- endif -%}
+    <div class="overlay">
+      <h1>{{ page.title }}</h1>
+      <div class="sub">
+        {%- if tmdb.year -%}{{ tmdb.year }}{% endif -%}
+        {%- if tmdb.runtime and tmdb.runtime != "" %} · {{ tmdb.runtime }}{% endif -%}
+        {%- if tmdb.director and tmdb.director != "" %} · dir. {{ tmdb.director }}{% endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Poster + info row {%- endcomment -%}
+  <div class="info-row">
+    <aside class="poster-side">
+      <div class="poster">
+        {%- if tmdb.poster and tmdb.poster != "" -%}
+          <img src="{{ tmdb.poster | relative_url }}" alt="{{ page.title }} poster" loading="lazy">
+        {%- else -%}
+          <img src="{{ fallback_poster }}" alt="No poster available" loading="lazy">
+        {%- endif -%}
+      </div>
+    </aside>
+
+    <div>
+      {%- comment -%} Stars & rating {%- endcomment -%}
+      <div class="mb-2" style="display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;">
+        {% include stars.html rating=page.rating size='xl' %}
+        <span class="rating-pill">{{ page.rating }} / 5</span>
+        <span class="text-muted">— {{ page.date | date: "%B %d, %Y" }}</span>
+      </div>
+
+      {%- comment -%} Meta data table {%- endcomment -%}
+      <dl class="meta-table">
+        {%- if tmdb.director and tmdb.director != "" -%}
+          <dt>Director</dt><dd>{{ tmdb.director }}</dd>
+        {%- endif -%}
+        {%- if tmdb.year -%}
+          <dt>Year</dt><dd>{{ tmdb.year }}</dd>
+        {%- endif -%}
+        {%- if tmdb.runtime and tmdb.runtime != "" -%}
+          <dt>Runtime</dt><dd>{{ tmdb.runtime }}</dd>
+        {%- endif -%}
+        {%- if tmdb.vote_average and tmdb.vote_average != "" -%}
+          <dt>TMDB</dt><dd>{{ tmdb.vote_average }} / 10</dd>
+        {%- endif -%}
+        {%- if page.tmdb_id -%}
+          <dt>TMDB ID</dt><dd><a href="https://www.themoviedb.org/movie/{{ page.tmdb_id }}" target="_blank" rel="noopener">#{{ page.tmdb_id }}</a></dd>
+        {%- endif -%}
+      </dl>
+
+      {%- comment -%} Genre tags {%- endcomment -%}
+      {%- if tmdb.genres and tmdb.genres.size > 0 -%}
+        <div class="mb-3">
+          {%- for g in tmdb.genres -%}
+            <a class="tag" href="{{ '/genres/' | relative_url }}#{{ g | slugify }}">{{ g }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Overview / synopsis (from TMDB) {%- endcomment -%}
+      {%- if tmdb.overview and tmdb.overview != "" -%}
+        <blockquote>{{ tmdb.overview }}</blockquote>
+      {%- endif -%}
+
+      {%- comment -%} Author's review body {%- endcomment -%}
+      <div class="review-body">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Navigation between reviews {%- endcomment -%}
+  <nav class="pagination mt-4" aria-label="Adjacent reviews">
+    {%- if page.previous -%}
+      <a href="{{ page.previous.url | relative_url }}" rel="prev">← {{ page.previous.title }}</a>
+    {%- else -%}
+      <span class="gap">←</span>
+    {%- endif -%}
+    <a href="{{ '/movies/' | relative_url }}">All reviews</a>
+    {%- if page.next -%}
+      <a href="{{ page.next.url | relative_url }}" rel="next">{{ page.next.title }} →</a>
+    {%- else -%}
+      <span class="gap">→</span>
+    {%- endif -%}
+  </nav>
+</article>

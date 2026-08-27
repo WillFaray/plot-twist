@@ -1,0 +1,43 @@
+{%- comment -%}
+  Renders a star rating (0..5, with half-star support).
+  Usage:
+    {% include stars.html rating=4.5 size="lg" %}
+  Size: sm (default) | lg | xl
+{%- endcomment -%}
+{%- assign size_in = include.size -%}
+{%- if size_in == nil or size_in == "" -%}{%- assign size = 'sm' -%}{%- else -%}{%- assign size = size_in -%}{%- endif -%}
+{%- assign rating_raw = include.rating -%}
+{%- if rating_raw == nil or rating_raw == "" -%}{%- assign r = 0.0 -%}{%- else -%}{%- assign r = rating_raw | plus: 0.0 -%}{%- endif -%}
+{%- assign full = r | floor -%}
+{%- assign has_half = false -%}
+{%- assign dec = r | minus: full -%}
+{%- if dec >= 0.75 -%}
+  {%- assign full = full | plus: 1 -%}
+{%- elsif dec >= 0.25 -%}
+  {%- assign has_half = true -%}
+{%- endif -%}
+{%- assign empty = 5 | minus: full -%}
+{%- if has_half -%}{%- assign empty = empty | minus: 1 -%}{%- endif -%}
+
+<span class="stars stars-{{ size }}" aria-label="Rating: {{ r }} out of 5" title="{{ r }} / 5">
+  {%- if full == 5 -%}
+    <span>★★★★★</span>
+  {%- elsif full == 4 -%}
+    <span>★★★★</span><span class="empty">★</span>
+  {%- elsif full == 3 and has_half -%}
+    <span>★★★</span><span class="empty">★★</span>
+  {%- elsif full == 3 -%}
+    <span>★★★</span><span class="empty">★★</span>
+  {%- elsif full == 2 and has_half -%}
+    <span>★★</span><span class="empty">★★★</span>
+  {%- elsif full == 2 -%}
+    <span>★★</span><span class="empty">★★★</span>
+  {%- elsif full == 1 and has_half -%}
+    <span>★</span><span class="empty">★★★★</span>
+  {%- elsif full == 1 -%}
+    <span>★</span><span class="empty">★★★★</span>
+  {%- else -%}
+    <span class="empty">★★★★★</span>
+  {%- endif -%}
+</span>
+

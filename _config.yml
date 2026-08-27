@@ -1,51 +1,85 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you:
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# ============================================================
+#  Plot Twist - Movie Reviews
+#  Config file for the Jekyll site
+# ============================================================
 
+# Site settings
 title: Plot Twist
+tagline: Movie Reviews for Instrumental English
 email: williamfaray@protonmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  website for movie reviews, narrative analysis and curated watchlists.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  WillFaray
+description: >-
+  A personal website for movie reviews, narrative analysis and curated
+  watchlists — built for an Instrumental English class.
+baseurl: ""           # the subpath of your site, e.g. /blog
+url: ""               # the base hostname & protocol, e.g. http://example.com
+github_username: WillFaray
+
+# Author info
+author:
+  name: William Faray
+  email: williamfaray@protonmail.com
+
+# Pagination
+paginate: 9
+paginate_path: "/movies/page:num/"
 
 # Build settings
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-sitemap
 
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+# Theme: we are NOT using the minima gem — we ship our own layouts.
+# Removing `theme:` so Jekyll falls back to layouts in _layouts/.
+
+permalink: /:year/:month/:day/:title:output_ext
+
+# Collections (kept default; posts in _posts/)
+collections:
+  posts:
+    output: true
+    permalink: /movies/:year/:month/:day/:title/
+
+# Defaults so authors only need to write the minimum front matter
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: movie
+      comments: false
+      rating: 0
+
+# Sass / SCSS
+sass:
+  sass_dir: assets/css
+  style: compressed
+
+# TMDB API key — used by the build script to fetch metadata.
+# Get one at https://www.themoviedb.org/settings/api
+# For local builds, set the env var TMDB_API_KEY instead, or fill it in here.
+# This file is safe to commit if you only set the env-var fallback.
+tmdb:
+  api_key: ""                       # <-- put your v3 key here, or use ENV
+  image_base: "https://image.tmdb.org/t/p/"
+  poster_size: "w500"
+  backdrop_size: "w1280"
+  language: "en-US"
+
+# Excluded from processing
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - .jekyll-metadata
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - node_modules/
+  - README.md
+  - .github/
+  - scripts/
+
+include:
+  - _pages

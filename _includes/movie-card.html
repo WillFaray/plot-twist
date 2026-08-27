@@ -1,0 +1,38 @@
+{%- comment -%}
+  Reusable movie card. Pass the post object in `post`.
+  Expects the post to expose (via TMDB fetch or front matter):
+    - title, date, rating (0-5)
+    - poster, backdrop, year, director, runtime, genres
+{%- endcomment -%}
+{%- assign p = include.post -%}
+{%- assign tmdb = p.tmdb | default: empty -%}
+<article class="movie-card">
+  <a class="poster" href="{{ p.url | relative_url }}" aria-label="Read review of {{ p.title }}">
+    {%- if tmdb.poster and tmdb.poster != "" -%}
+      <img src="{{ tmdb.poster | relative_url }}" alt="{{ p.title }} poster" loading="lazy">
+    {%- else -%}
+      <div class="placeholder">🎬</div>
+    {%- endif -%}
+  </a>
+  <div class="body">
+    <h3 class="title"><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+    <div class="meta">
+      {%- if tmdb.year -%}<span>{{ tmdb.year }}</span>{%- endif -%}
+      {%- if tmdb.runtime and tmdb.runtime != "" -%}
+        <span class="dot">•</span><span>{{ tmdb.runtime }}</span>
+      {%- endif -%}
+      {%- if tmdb.director and tmdb.director != "" -%}
+        <span class="dot">•</span><span>{{ tmdb.director }}</span>
+      {%- endif -%}
+    </div>
+    {%- if p.excerpt and p.excerpt != "" -%}
+      <p class="excerpt">{{ p.excerpt | strip_html | truncate: 160 }}</p>
+    {%- elsif tmdb.overview and tmdb.overview != "" -%}
+      <p class="excerpt">{{ tmdb.overview | truncate: 160 }}</p>
+    {%- endif -%}
+    <div class="footer">
+      {% include stars.html rating=p.rating size="sm" %}
+      <span class="rating-pill">{{ p.rating }} / 5</span>
+    </div>
+  </div>
+</article>

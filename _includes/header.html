@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <span class="brand-mark">PT</span>
+      <span class="brand-name">Plot<span>Twist</span></span>
+    </a>
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
+      <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' %}class="active"{% endif %}>Filmes</a>
+      <a href="{{ '/genres/' | relative_url }}" {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>Sobre</a>
+    </nav>
+    <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav" onclick="var n=document.getElementById('primary-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o);">☰</button>
+  </div>
+</header>

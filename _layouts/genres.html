@@ -1,0 +1,60 @@
+---
+layout: default
+---
+{%- comment -%}
+  Builds an index of all distinct genres across the post collection,
+  with a chip for each. Each chip links to the filtered list below.
+{%- endcomment -%}
+{%- assign genre_map = "" | split: "" -%}
+{%- assign seen = "" | split: "" -%}
+{%- assign all_movies = site.posts | where_exp: "p", "p.layout == 'movie'" -%}
+
+{%- comment -%} First pass: build a hash of genre => [posts] via capture {%- endcomment -%}
+{%- assign genre_data = "" -%}
+{%- for post in all_movies -%}
+  {%- assign tg = post.tmdb.genres | default: empty -%}
+  {%- for g in tg -%}
+    {%- assign key = g | slugify -%}
+    {%- assign existing = site.data.genres[key] | default: empty -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- comment -%} Easier: build the data file at build time using the existing plugin. {%- endcomment -%}
+<div class="container">
+  <section class="hero" style="padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--border);">
+    <h1 style="font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 .35rem;">Browse by genre</h1>
+    <p class="lead" style="margin: 0;">Pick a genre and jump straight to the reviews inside it.</p>
+  </section>
+
+  {%- if site.data.genres -%}
+    <div class="genre-cloud mt-3">
+      {%- assign sorted = site.data.genres | sort -%}
+      {%- for entry in sorted -%}
+        {%- assign slug = entry[0] -%}
+        {%- assign info = entry[1] -%}
+        <a class="genre-chip" href="#{{ slug }}" id="{{ slug }}">
+          {{ info.name }}
+          <span class="count">· {{ info.count }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+
+    {%- for entry in sorted -%}
+      {%- assign slug = entry[0] -%}
+      {%- assign info = entry[1] -%}
+      <section class="mt-4">
+        <h2 class="section-head" style="margin-top: 2rem;">
+          <span>{{ info.name }}</span>
+          <span class="sub">{{ info.count }} review{{ info.count | pluralize: "", "s" }}</span>
+        </h2>
+        <div class="movie-grid">
+          {%- for post in info.posts -%}
+            {% include movie-card.html post=post %}
+          {%- endfor -%}
+        </div>
+      </section>
+    {%- endfor -%}
+  {%- else -%}
+    <p class="text-muted mt-4">No genre data yet. Add a few movie reviews and rebuild.</p>
+  {%- endif -%}
+</div>
