@@ -5,7 +5,7 @@
 #  Auto-creates two extra pages even if the user did not write
 #  them by hand:
 #
-#   /movies/  -> paginated list of all movie reviews
+#   /movies/  -> list of all movie reviews
 #   /genres/  -> index grouped by genre (links to filtered lists)
 #
 #  If the user already has movies.md / genres.md with `layout:
@@ -106,3 +106,22 @@ module Jekyll
   end
 end
 Liquid::Template.register_filter(Jekyll::GenreFilter)
+
+# ---- Liquid filter: simple English pluralization -----------------------------
+#  Liquid has no built-in `pluralize`, so `{{ 4 | pluralize: "", "s" }}`
+#  silently passes the number through and produces "4 review4".
+#  This filter returns the correct word form instead:
+#
+#    {{ count }} review{{ count | pluralize: "", "s" }}   ->  "1 review"
+#                                                            "4 reviews"
+#    {{ count | pluralize: "movie", "movies" }}           ->  "1 movie"
+#                                                            "4 movies"
+module Jekyll
+  module PluralizeFilter
+    def pluralize(input, singular = "", plural = "s")
+      count = input.to_i
+      count == 1 ? singular : plural
+    end
+  end
+end
+Liquid::Template.register_filter(Jekyll::PluralizeFilter)

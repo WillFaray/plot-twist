@@ -168,17 +168,16 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 .brand .brand-name span { color: var(--accent); font-weight: 700; }
 
 /* Top-level nav */
-.nav {
+.nav { margin-left: auto; }
+.nav-list {
   display: flex;
   align-items: stretch;
   gap: 0;
-  margin-left: auto;
-  list-style: none;
+  margin: 0;
   padding: 0;
-  margin: 0 0 0 auto;
+  list-style: none;
 }
-.nav > a,
-.nav > .nav-dropdown > a {
+.nav-list > li > a {
   display: inline-flex;
   align-items: center;
   height: 100%;
@@ -188,35 +187,35 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   font-size: 1rem;
   border-bottom: 0;
   border-radius: 0;
-  cursor: pointer;
-  user-select: none;
   position: relative;
   background: transparent;
-  list-style: none;
 }
-.nav > a:hover,
-.nav > .nav-dropdown > a:hover {
+.nav-list > li > a:hover,
+.nav-list > li > a.active {
   color: #fff;
   background: var(--header-hover);
   border-bottom: 0;
 }
-.nav > a.active,
-.nav > .nav-dropdown > a.active {
-  color: #fff;
-  background: var(--header-hover);
-}
 
-/* Dropdown — bitcoin.org style: shows on hover, no chevron,
-   no underline, plain list of names. */
+/* Dropdown — bitcoin.org style: opens on hover, plain list of
+   genre names. The caret is drawn with borders (not a text
+   glyph) so it stays crisp at every font size. */
 .nav-dropdown { position: relative; display: flex; align-items: stretch; }
 .nav-dropdown > a::after {
-  content: " \25BE";
-  font-size: 0.65em;
-  margin-left: 0.4em;
-  opacity: 0.55;
-  position: relative;
-  top: -0.1em;
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 0.55em;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 }
+.nav-dropdown:hover > a::after,
+.nav-dropdown:focus-within > a::after { opacity: 1; }
 .nav-dropdown-menu {
   list-style: none;
   margin: 0;
@@ -263,21 +262,28 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 @media (max-width: 760px) {
   .nav { display: none; }
   .nav.open {
-    display: flex; flex-direction: column; align-items: stretch;
+    display: block;
     position: absolute; top: 100%; right: 0; left: 0;
     background: var(--header-bg);
     border-top: 1px solid var(--header-border);
     z-index: 70;
   }
-  .nav.open > a,
-  .nav.open > .nav-dropdown > summary {
-    height: auto; padding: 0.85rem 1.25rem;
-    justify-content: flex-start;
+  .nav.open .nav-list { flex-direction: column; align-items: stretch; }
+  .nav.open .nav-list > li > a {
+    display: block;
+    height: auto;
+    padding: 0.85rem 1.25rem;
   }
-  .nav.open > a.active::after,
-  .nav.open > .nav-dropdown > summary.active::after,
-  .nav.open > .nav-dropdown[open] > summary::after { display: none; }
-  .nav.open .nav-dropdown-menu { position: static; box-shadow: none; border: 0; border-top: 1px solid var(--header-border); }
+  .nav.open .nav-dropdown { display: block; }
+  /* hover dropdowns don't exist on touch screens: show the list inline */
+  .nav.open .nav-dropdown-menu {
+    position: static;
+    display: block;
+    box-shadow: none;
+    border: 0;
+    border-top: 1px solid var(--header-border);
+  }
+  .nav.open .nav-dropdown-menu a { padding-left: 2.2rem; }
   .nav-toggle { display: inline-flex; }
 }
 
@@ -368,6 +374,7 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   margin: 0.25em 0 0.4em;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -399,6 +406,18 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 .stars .empty { color: color-mix(in oklab, var(--star) 30%, var(--border)); }
 .stars-lg { font-size: 1.2rem; }
 .stars-xl { font-size: 1.5rem; }
+
+/* Half star (stars.html): a gray star with a gold star clipped to
+   its left half laid on top. Works without SVG gradients/ids. */
+.stars .half { position: relative; display: inline-block; }
+.stars .half .fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: var(--star);
+}
 
 .rating-pill {
   display: inline-flex; align-items: center; gap: 0.3rem;

@@ -4,6 +4,7 @@ title: "The Matrix"
 date: 2026-08-15 21:00:00 -0300
 tmdb_id: 603
 rating: 5.0
+genres: [Action, Science Fiction]
 excerpt: "A computer hacker learns from mysterious rebels about the true nature of his reality."
 ---
 

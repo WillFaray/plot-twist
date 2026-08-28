@@ -3,26 +3,25 @@
     <a class="brand" href="{{ '/' | relative_url }}">
       <span class="brand-name">Plot<span>Twist</span></span>
     </a>
-    {%- assign available = '' | genre_bucket -%}
     <nav class="nav" id="primary-nav" aria-label="Primary">
-      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
-      <a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' and page.url != '/movies/' %}class="active"{% endif %}>Filmes</a>
-
-      <li class="nav-dropdown">
-        <a href="{{ '/genres/' | relative_url }}" {% if page.url contains '/genres' %}class="active"{% endif %}>Gêneros</a>
-        <ul class="nav-dropdown-menu" role="menu">
-          {%- if site.genres.common and site.genres.common.size > 0 -%}
-            {%- for g in site.genres.common -%}
-              {%- assign slug = g.name | slugify -%}
-              <li><a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">{{ g.name }}</a></li>
-            {%- endfor -%}
-          {%- endif -%}
-        </ul>
-      </li>
-
-      <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>Sobre</a>
+      <ul class="nav-list">
+        <li><a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a></li>
+        <li><a href="{{ '/movies/' | relative_url }}" {% if page.url contains '/movies' and page.url != '/movies/' %}class="active"{% endif %}>Movies</a></li>
+        <li class="nav-dropdown">
+          <a href="{{ '/genres/' | relative_url }}" {% if page.url contains '/genres' %}class="active"{% endif %}>Genres</a>
+          <ul class="nav-dropdown-menu" role="menu">
+            {%- if site.genres.common and site.genres.common.size > 0 -%}
+              {%- for g in site.genres.common -%}
+                {%- assign slug = g.name | slugify -%}
+                <li><a href="{{ '/genres/#' | append: slug | relative_url }}" role="menuitem">{{ g.name }}</a></li>
+              {%- endfor -%}
+            {%- endif -%}
+          </ul>
+        </li>
+        <li><a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>About</a></li>
+      </ul>
     </nav>
-    <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav" onclick="var n=document.getElementById('primary-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o);">☰</button>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav" onclick="var n=document.getElementById('primary-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o);">☰</button>
   </div>
 </header>
 

@@ -10,18 +10,14 @@ email: williamfaray@protonmail.com
 description: >-
   A personal website for movie reviews, narrative analysis and curated
   watchlists — built for an Instrumental English class.
-baseurl: ""           # the subpath of your site, e.g. /blog
-url: ""               # the base hostname & protocol, e.g. http://example.com
+baseurl: "/plot-twist"
+url: "https://williamfaray.github.io/plot-twist/" 
 github_username: WillFaray
 
 # Author info
 author:
   name: William Faray
   email: williamfaray@protonmail.com
-
-# Pagination
-paginate: 9
-paginate_path: "/movies/page:num/"
 
 # Common TMDB genre IDs used to build the "Genres" dropdown.
 # Reference: https://www.themoviedb.org/talk/5daf6b0ae1733a11e0042f44
@@ -52,7 +48,6 @@ genres:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
-  - jekyll-paginate
   - jekyll-sitemap
 
 # Theme: we are NOT using the minima gem — we ship our own layouts.

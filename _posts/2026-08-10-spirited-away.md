@@ -4,6 +4,7 @@ title: "Spirited Away"
 date: 2026-08-10 18:30:00 -0300
 tmdb_id: 129
 rating: 4.5
+genres: [Animation, Family, Fantasy]
 excerpt: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits."
 ---
 

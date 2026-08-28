@@ -27,6 +27,7 @@ require "net/http"
 require "uri"
 require "fileutils"
 require "digest"
+require "tempfile"
 
 module PlotTwist
   module TMDB
@@ -42,8 +43,10 @@ module PlotTwist
       c = site.config["tmdb"] || {}
       {
         "image_base"    => c["image_base"]    || IMAGE_BASE_DEFAULT,
-        "poster_size"   => c["poster_size"]   || "w500",
-        "backdrop_size" => c["backdrop_size"] || "w1280",
+        "poster_size"        => c["poster_size"]        || "w500",
+        "poster_size_small"  => c["poster_size_small"]  || "w185",
+        "backdrop_size"      => c["backdrop_size"]      || "w1280",
+        "backdrop_size_small" => c["backdrop_size_small"] || "w780",
         "language"      => c["language"]      || "en-US",
       }
     end
@@ -94,6 +97,26 @@ module PlotTwist
     end
 
     # ---- Image download ------------------------------------------------------
+    #  Every download is validated and written atomically:
+    #   - the response body must be a real image (JPEG/PNG/WebP magic
+    #     bytes) and fit a sane size range;
+    #   - bytes go to a temp file in the destination directory and are
+    #     only renamed into place after validation, so a failed or
+    #     interrupted download can never leave a corrupt image behind.
+    MIN_IMAGE_BYTES = 1024                # < 1 KB is never a real poster
+    MAX_IMAGE_BYTES = 10 * 1024 * 1024    # 10 MB ceiling
+
+    def self.valid_image_body?(body)
+      return false if body.nil?
+      return false if body.bytesize < MIN_IMAGE_BYTES
+      return false if body.bytesize > MAX_IMAGE_BYTES
+      sig = body.byteslice(0, 12)
+      is_jpeg = sig.byteslice(0, 3) == "\xFF\xD8\xFF".b
+      is_png  = sig.byteslice(0, 8) == "\x89PNG\r\n\x1A\n".b
+      is_webp = sig.byteslice(0, 4) == "RIFF".b && sig.byteslice(8, 4) == "WEBP".b
+      is_jpeg || is_png || is_webp
+    end
+
     def self.download(site, url, dest)
       return true if File.exist?(dest) && File.size(dest) > 0
       return false if url.nil? || url.empty?
@@ -104,15 +127,41 @@ module PlotTwist
       http.use_ssl = (uri.scheme == "https")
       http.open_timeout = 8
       http.read_timeout = 20
-      res = http.request(Net::HTTP::Get.new(uri.request_uri))
-      return false unless res.is_a?(Net::HTTPSuccess)
+      req = Net::HTTP::Get.new(uri.request_uri)
+      res = http.request(req)
 
-      File.binwrite(dest, res.body)
+      unless res.is_a?(Net::HTTPSuccess)
+        Jekyll.logger.warn "TMDB", "HTTP #{res.code} for image #{url}"
+        return false
+      end
+
+      body = res.body.to_s
+      unless valid_image_body?(body)
+        Jekyll.logger.warn "TMDB", "image failed validation (#{url})"
+        return false
+      end
+
+      tmp = Tempfile.create(["tmdb-", File.extname(dest)], File.dirname(dest))
+      moved = false
+      begin
+        tmp.binmode
+        tmp.write(body)
+        tmp.flush
+        tmp.close
+        FileUtils.mv(tmp.path, dest)
+        moved = true
+      ensure
+        tmp.close! unless moved
+      end
       true
     rescue StandardError => e
       Jekyll.logger.warn "TMDB", "image download failed (#{url}): #{e.message}"
       false
     end
+
+    # Bundled placeholder used when a poster cannot be downloaded —
+    # never keep external image.tmdb.org URLs in the built site.
+    PLACEHOLDER_POSTER = "/assets/images/poster-placeholder.svg"
 
     # ---- Director lookup (from credits) --------------------------------------
     def self.director_of(movie_json)
@@ -141,42 +190,70 @@ module PlotTwist
 
       poster_path   = data["poster_path"]
       backdrop_path = data["backdrop_path"]
-      poster_url    = poster_path   ? "#{cfg['image_base']}#{cfg['poster_size']}#{poster_path}"   : nil
-      backdrop_url  = backdrop_path ? "#{cfg['image_base']}#{cfg['backdrop_size']}#{backdrop_path}" : nil
+      poster_url      = poster_path   ? "#{cfg['image_base']}#{cfg['poster_size']}#{poster_path}"        : nil
+      poster_sm_url   = poster_path   ? "#{cfg['image_base']}#{cfg['poster_size_small']}#{poster_path}"  : nil
+      backdrop_url    = backdrop_path ? "#{cfg['image_base']}#{cfg['backdrop_size']}#{backdrop_path}"    : nil
+      backdrop_sm_url = backdrop_path ? "#{cfg['image_base']}#{cfg['backdrop_size_small']}#{backdrop_path}" : nil
 
       idir = image_dir(site)
       sid  = safe_id(id)
 
-      local_poster   = poster_url   ? download(site, poster_url,   File.join(idir, "#{sid}_poster.jpg"))   : false
-      local_backdrop = backdrop_url ? download(site, backdrop_url, File.join(idir, "#{sid}_backdrop.jpg")) : false
+      ok_poster      = poster_url      ? download(site, poster_url,      File.join(idir, "#{sid}_poster.jpg"))      : false
+      ok_poster_sm   = poster_sm_url   ? download(site, poster_sm_url,   File.join(idir, "#{sid}_poster_sm.jpg"))   : false
+      ok_backdrop    = backdrop_url    ? download(site, backdrop_url,    File.join(idir, "#{sid}_backdrop.jpg"))    : false
+      ok_backdrop_sm = backdrop_sm_url ? download(site, backdrop_sm_url, File.join(idir, "#{sid}_backdrop_sm.jpg")) : false
+
+      big_poster   = ok_poster    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
+      small_poster = ok_poster_sm ? "/assets/images/movies/#{sid}_poster_sm.jpg" : big_poster
 
       {
-        "id"           => id,
-        "year"         => (data["release_date"] || "")[0, 4],
-        "runtime"      => data["runtime"].to_i > 0 ? "#{data['runtime']} min" : "",
-        "overview"     => data["overview"].to_s,
-        "tagline"      => data["tagline"].to_s,
-        "vote_average" => data["vote_average"],
-        "genres"       => Array(data["genres"]).map { |g| g["name"] },
-        "director"     => director_of(data) || post.data["director"],
-        "poster"       => local_poster   ? "/assets/images/movies/#{sid}_poster.jpg"   : (poster_url   || ""),
-        "backdrop"     => local_backdrop ? "/assets/images/movies/#{sid}_backdrop.jpg" : (backdrop_url || ""),
+        "id"             => id,
+        "year"           => (data["release_date"] || "")[0, 4],
+        "runtime"        => data["runtime"].to_i > 0 ? "#{data['runtime']} min" : "",
+        "overview"       => data["overview"].to_s,
+        "tagline"        => data["tagline"].to_s,
+        "vote_average"   => data["vote_average"],
+        "genres"         => Array(data["genres"]).map { |g| g["name"] },
+        "director"       => director_of(data) || post.data["director"],
+        # If the local download fails we fall back to the bundled
+        # placeholder (posters) or to nothing (backdrops) — the built
+        # site stays self-contained, with no external image URLs.
+        "poster"         => big_poster || PLACEHOLDER_POSTER,
+        "poster_small"   => small_poster || PLACEHOLDER_POSTER,
+        "backdrop"       => ok_backdrop    ? "/assets/images/movies/#{sid}_backdrop.jpg"    : "",
+        "backdrop_small" => ok_backdrop_sm ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : (ok_backdrop ? "/assets/images/movies/#{sid}_backdrop.jpg" : ""),
       }
     end
 
     # If no API key / fetch failed, build a hash from front matter only.
+    # Posters/backdrops downloaded by earlier builds still live on disk in
+    # assets/images/movies/, so key-less rebuilds keep showing real art
+    # instead of degrading to the placeholder.
     def self.fallback_from_front_matter(post)
+      sid  = safe_id(post.data["tmdb_id"])
+      dir  = image_dir(post.site)
+
+      big_poster      = File.exist?(File.join(dir, "#{sid}_poster.jpg"))    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
+      small_poster    = File.exist?(File.join(dir, "#{sid}_poster_sm.jpg")) ? "/assets/images/movies/#{sid}_poster_sm.jpg" : big_poster
+      big_backdrop    = File.exist?(File.join(dir, "#{sid}_backdrop.jpg"))    ? "/assets/images/movies/#{sid}_backdrop.jpg"    : nil
+      small_backdrop  = File.exist?(File.join(dir, "#{sid}_backdrop_sm.jpg")) ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : big_backdrop
+
+      author_poster   = post.data["poster"].to_s
+      author_backdrop = post.data["backdrop"].to_s
+
       {
-        "id"           => post.data["tmdb_id"],
-        "year"         => post.data["year"] || (post.data["date"]&.year),
-        "runtime"      => post.data["runtime"] || "",
-        "overview"     => post.data["overview"] || post.data["synopsis"] || "",
-        "tagline"      => post.data["tagline"] || "",
-        "vote_average" => post.data["vote_average"] || "",
-        "genres"       => Array(post.data["genres"]),
-        "director"     => post.data["director"] || "",
-        "poster"       => post.data["poster"] || "",
-        "backdrop"     => post.data["backdrop"] || "",
+        "id"             => post.data["tmdb_id"],
+        "year"           => post.data["year"] || (post.data["date"]&.year),
+        "runtime"        => post.data["runtime"] || "",
+        "overview"       => post.data["overview"] || post.data["synopsis"] || "",
+        "tagline"        => post.data["tagline"] || "",
+        "vote_average"   => post.data["vote_average"] || "",
+        "genres"         => Array(post.data["genres"]),
+        "director"       => post.data["director"] || "",
+        "poster"         => author_poster.empty?    ? (big_poster    || PLACEHOLDER_POSTER) : author_poster,
+        "poster_small"   => author_poster.empty?    ? (small_poster  || big_poster || PLACEHOLDER_POSTER) : author_poster,
+        "backdrop"       => author_backdrop.empty?  ? (big_backdrop  || "") : author_backdrop,
+        "backdrop_small" => author_backdrop.empty?  ? (small_backdrop || big_backdrop || "") : author_backdrop,
       }
     end
   end

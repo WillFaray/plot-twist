@@ -4,6 +4,7 @@ title: "Everything Everywhere All at Once"
 date: 2026-07-28 20:15:00 -0300
 tmdb_id: 545611
 rating: 4.0
+genres: [Action, Adventure, Comedy, Science Fiction, Fantasy]
 excerpt: "An aging Chinese immigrant is swept up in an insane adventure, where she alone can save existence by exploring other universes connecting with the lives she could have led."
 ---
 

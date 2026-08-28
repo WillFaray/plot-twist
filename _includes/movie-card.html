@@ -9,7 +9,13 @@
 <article class="movie-card">
   <a class="poster" href="{{ p.url | relative_url }}" aria-label="Read review of {{ p.title }}">
     {%- if tmdb.poster and tmdb.poster != "" -%}
-      <img src="{{ tmdb.poster | relative_url }}" alt="{{ p.title }} poster" loading="lazy">
+      {%- assign thumb_src = tmdb.poster_small | default: tmdb.poster -%}
+      <img
+        src="{{ thumb_src | relative_url }}"
+        srcset="{{ thumb_src | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"
+        sizes="(max-width: 700px) 45vw, 240px"
+        width="185" height="278"
+        alt="{{ p.title }} poster" loading="lazy" decoding="async">
     {%- else -%}
       <div class="placeholder">🎬</div>
     {%- endif -%}
