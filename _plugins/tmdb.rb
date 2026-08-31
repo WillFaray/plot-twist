@@ -198,13 +198,28 @@ module PlotTwist
       idir = image_dir(site)
       sid  = safe_id(id)
 
-      ok_poster      = poster_url      ? download(site, poster_url,      File.join(idir, "#{sid}_poster.jpg"))      : false
-      ok_poster_sm   = poster_sm_url   ? download(site, poster_sm_url,   File.join(idir, "#{sid}_poster_sm.jpg"))   : false
-      ok_backdrop    = backdrop_url    ? download(site, backdrop_url,    File.join(idir, "#{sid}_backdrop.jpg"))    : false
-      ok_backdrop_sm = backdrop_sm_url ? download(site, backdrop_sm_url, File.join(idir, "#{sid}_backdrop_sm.jpg")) : false
+      poster_path_local     = File.join(idir, "#{sid}_poster.jpg")
+      poster_sm_path_local  = File.join(idir, "#{sid}_poster_sm.jpg")
+      backdrop_path_local   = File.join(idir, "#{sid}_backdrop.jpg")
+      backdrop_sm_path_local= File.join(idir, "#{sid}_backdrop_sm.jpg")
 
-      big_poster   = ok_poster    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
-      small_poster = ok_poster_sm ? "/assets/images/movies/#{sid}_poster_sm.jpg" : nil
+      ok_poster      = poster_url      ? download(site, poster_url,      poster_path_local)      : false
+      ok_poster_sm   = poster_sm_url   ? download(site, poster_sm_url,   poster_sm_path_local)   : false
+      ok_backdrop    = backdrop_url    ? download(site, backdrop_url,    backdrop_path_local)    : false
+      ok_backdrop_sm = backdrop_sm_url ? download(site, backdrop_sm_url, backdrop_sm_path_local) : false
+
+      # Only emit a *_sm.jpg URL when the file is actually on disk and
+      # non-empty. The download can succeed (HTTP 200) while still
+      # returning a 404 HTML body that fails our magic-bytes check, in
+      # which case `ok_*_sm` will be false. The big images keep working
+      # because they were committed to the repo earlier.
+      has_poster_sm   = File.exist?(poster_sm_path_local)    && File.size(poster_sm_path_local)    > 0
+      has_backdrop_sm = File.exist?(backdrop_sm_path_local) && File.size(backdrop_sm_path_local) > 0
+
+      big_poster    = ok_poster    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
+      small_poster  = has_poster_sm ? "/assets/images/movies/#{sid}_poster_sm.jpg" : nil
+      big_backdrop  = ok_backdrop    ? "/assets/images/movies/#{sid}_backdrop.jpg"    : ""
+      small_backdrop= has_backdrop_sm ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : ""
 
       {
         "id"             => id,
@@ -219,9 +234,9 @@ module PlotTwist
         # placeholder (posters) or to nothing (backdrops) — the built
         # site stays self-contained, with no external image URLs.
         "poster"         => big_poster || PLACEHOLDER_POSTER,
-        "poster_small"   => small_poster || PLACEHOLDER_POSTER,
-        "backdrop"       => ok_backdrop    ? "/assets/images/movies/#{sid}_backdrop.jpg"    : "",
-        "backdrop_small" => ok_backdrop_sm ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : (ok_backdrop ? "/assets/images/movies/#{sid}_backdrop.jpg" : ""),
+        "poster_small"   => small_poster || big_poster || PLACEHOLDER_POSTER,
+        "backdrop"       => big_backdrop,
+        "backdrop_small" => small_backdrop || big_backdrop,
       }
     end
 

@@ -9,7 +9,7 @@ layout: default
   {%- comment -%} Backdrop hero with title overlay {%- endcomment -%}
   <div class="backdrop">
     {%- if tmdb.backdrop and tmdb.backdrop != "" -%}
-      {%- if tmdb.backdrop_small and tmdb.backdrop_small != "" -%}
+      {%- if tmdb.backdrop_small and tmdb.backdrop_small != "" and tmdb.backdrop_small != tmdb.backdrop -%}
       <img
         src="{{ tmdb.backdrop | relative_url }}"
         srcset="{{ tmdb.backdrop_small | relative_url }} 780w, {{ tmdb.backdrop | relative_url }} 1280w"
@@ -38,7 +38,7 @@ layout: default
     <aside class="poster-side">
       <div class="poster">
         {%- if tmdb.poster and tmdb.poster != "" -%}
-          {%- if tmdb.poster_small and tmdb.poster_small != "" -%}
+          {%- if tmdb.poster_small and tmdb.poster_small != "" and tmdb.poster_small != tmdb.poster -%}
           <img
             src="{{ tmdb.poster_small | relative_url }}"
             srcset="{{ tmdb.poster_small | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"

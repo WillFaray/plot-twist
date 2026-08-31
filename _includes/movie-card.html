@@ -9,7 +9,7 @@
 <article class="movie-card">
   <a class="poster" href="{{ p.url | relative_url }}" aria-label="Read review of {{ p.title }}">
     {%- if tmdb.poster and tmdb.poster != "" -%}
-      {%- if tmdb.poster_small and tmdb.poster_small != "" -%}
+      {%- if tmdb.poster_small and tmdb.poster_small != "" and tmdb.poster_small != tmdb.poster -%}
       <img
         src="{{ tmdb.poster_small | relative_url }}"
         srcset="{{ tmdb.poster_small | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"
