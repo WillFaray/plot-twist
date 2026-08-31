@@ -204,7 +204,7 @@ module PlotTwist
       ok_backdrop_sm = backdrop_sm_url ? download(site, backdrop_sm_url, File.join(idir, "#{sid}_backdrop_sm.jpg")) : false
 
       big_poster   = ok_poster    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
-      small_poster = ok_poster_sm ? "/assets/images/movies/#{sid}_poster_sm.jpg" : big_poster
+      small_poster = ok_poster_sm ? "/assets/images/movies/#{sid}_poster_sm.jpg" : nil
 
       {
         "id"             => id,
@@ -234,9 +234,9 @@ module PlotTwist
       dir  = image_dir(post.site)
 
       big_poster      = File.exist?(File.join(dir, "#{sid}_poster.jpg"))    ? "/assets/images/movies/#{sid}_poster.jpg"    : nil
-      small_poster    = File.exist?(File.join(dir, "#{sid}_poster_sm.jpg")) ? "/assets/images/movies/#{sid}_poster_sm.jpg" : big_poster
+      small_poster    = File.exist?(File.join(dir, "#{sid}_poster_sm.jpg")) ? "/assets/images/movies/#{sid}_poster_sm.jpg" : nil
       big_backdrop    = File.exist?(File.join(dir, "#{sid}_backdrop.jpg"))    ? "/assets/images/movies/#{sid}_backdrop.jpg"    : nil
-      small_backdrop  = File.exist?(File.join(dir, "#{sid}_backdrop_sm.jpg")) ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : big_backdrop
+      small_backdrop  = File.exist?(File.join(dir, "#{sid}_backdrop_sm.jpg")) ? "/assets/images/movies/#{sid}_backdrop_sm.jpg" : nil
 
       author_poster   = post.data["poster"].to_s
       author_backdrop = post.data["backdrop"].to_s
@@ -251,7 +251,7 @@ module PlotTwist
         "genres"         => Array(post.data["genres"]),
         "director"       => post.data["director"] || "",
         "poster"         => author_poster.empty?    ? (big_poster    || PLACEHOLDER_POSTER) : author_poster,
-        "poster_small"   => author_poster.empty?    ? (small_poster  || big_poster || PLACEHOLDER_POSTER) : author_poster,
+        "poster_small"   => author_poster.empty?    ? (small_poster  || "") : author_poster,
         "backdrop"       => author_backdrop.empty?  ? (big_backdrop  || "") : author_backdrop,
         "backdrop_small" => author_backdrop.empty?  ? (small_backdrop || big_backdrop || "") : author_backdrop,
       }

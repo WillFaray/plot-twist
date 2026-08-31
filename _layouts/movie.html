@@ -9,12 +9,19 @@ layout: default
   {%- comment -%} Backdrop hero with title overlay {%- endcomment -%}
   <div class="backdrop">
     {%- if tmdb.backdrop and tmdb.backdrop != "" -%}
+      {%- if tmdb.backdrop_small and tmdb.backdrop_small != "" -%}
       <img
         src="{{ tmdb.backdrop | relative_url }}"
-        srcset="{{ tmdb.backdrop_small | default: tmdb.backdrop | relative_url }} 780w, {{ tmdb.backdrop | relative_url }} 1280w"
+        srcset="{{ tmdb.backdrop_small | relative_url }} 780w, {{ tmdb.backdrop | relative_url }} 1280w"
         sizes="(max-width: 960px) 100vw, 940px"
         width="1280" height="720"
         alt="" loading="eager" decoding="async" fetchpriority="high">
+      {%- else -%}
+      <img
+        src="{{ tmdb.backdrop | relative_url }}"
+        width="1280" height="720"
+        alt="" loading="eager" decoding="async" fetchpriority="high">
+      {%- endif -%}
     {%- endif -%}
     <div class="overlay">
       <h1>{{ page.title }}</h1>
@@ -31,12 +38,19 @@ layout: default
     <aside class="poster-side">
       <div class="poster">
         {%- if tmdb.poster and tmdb.poster != "" -%}
+          {%- if tmdb.poster_small and tmdb.poster_small != "" -%}
           <img
-            src="{{ tmdb.poster_small | default: tmdb.poster | relative_url }}"
-            srcset="{{ tmdb.poster_small | default: tmdb.poster | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"
+            src="{{ tmdb.poster_small | relative_url }}"
+            srcset="{{ tmdb.poster_small | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"
             sizes="(max-width: 640px) 35vw, 200px"
             width="185" height="278"
             alt="{{ page.title }} poster" loading="lazy" decoding="async">
+          {%- else -%}
+          <img
+            src="{{ tmdb.poster | relative_url }}"
+            width="185" height="278"
+            alt="{{ page.title }} poster" loading="lazy" decoding="async">
+          {%- endif -%}
         {%- else -%}
           <img src="{{ fallback_poster }}" width="185" height="278"
                alt="No poster available" loading="lazy" decoding="async">
