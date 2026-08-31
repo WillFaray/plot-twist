@@ -5,3 +5,6 @@ _site
 vendor
 
 .env
+
+# Downloaded TMDB artwork (_sm variants are built artifacts, not committed)
+assets/images/movies/*_sm.jpg

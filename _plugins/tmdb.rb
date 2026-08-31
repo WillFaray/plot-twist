@@ -149,6 +149,8 @@ module PlotTwist
         tmp.flush
         tmp.close
         FileUtils.mv(tmp.path, dest)
+        # Tempfile.create produces 0600 files; web servers can't serve those.
+        File.chmod(0o644, dest)
         moved = true
       ensure
         tmp.close! unless moved
@@ -271,6 +273,30 @@ module PlotTwist
         "backdrop_small" => author_backdrop.empty?  ? (small_backdrop || big_backdrop || "") : author_backdrop,
       }
     end
+
+    # ---- Sync downloaded _sm images to the destination (_site) -----------------
+    #  Jekyll registers static files during its *read* phase and copies them to
+    #  _site during the *write* phase.  The pre_render hook above downloads
+    #  _sm images during the *render* phase — after static-file registration —
+    #  so those files never make it to _site.  This method manually copies them
+    #  so that templates (home page, movie listing, etc.) can reference them.
+    def self.sync_sm_to_dest(site)
+      src_dir = image_dir(site)
+      return unless File.directory?(src_dir)
+
+      dest_root = site.config["destination"]
+      dst_dir   = File.join(dest_root, "assets", "images", "movies")
+      FileUtils.mkdir_p(dst_dir)
+
+      Dir.glob(File.join(src_dir, "*_sm.jpg")).each do |src|
+        filename = File.basename(src)
+        dst      = File.join(dst_dir, filename)
+        next unless File.size?(src)
+        next if File.exist?(dst) && File.size(dst) == File.size(src)
+        FileUtils.cp(src, dst)
+        File.chmod(0o644, dst)
+      end
+    end
   end
 end
 
@@ -279,4 +305,5 @@ Jekyll::Hooks.register :posts, :pre_render do |post|
   next unless post.data["tmdb_id"]
   site = post.site
   post.data["tmdb"] = PlotTwist::TMDB.enrich(post, site)
+  PlotTwist::TMDB.sync_sm_to_dest(site)
 end
