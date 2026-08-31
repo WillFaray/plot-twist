@@ -14,21 +14,11 @@
 <article class="movie-list-item">
   <a class="thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title }} poster">
     {%- if tmdb.poster and tmdb.poster != "" -%}
-      {%- assign thumb_src = tmdb.poster -%}
-      {%- if tmdb.poster_small and tmdb.poster_small != "" and tmdb.poster_small != tmdb.poster -%}
-        {%- assign thumb_src = tmdb.poster_small -%}
-        <img
-          src="{{ thumb_src | relative_url }}"
-          srcset="{{ thumb_src | relative_url }} 185w, {{ tmdb.poster | relative_url }} 500w"
-          sizes="(max-width: 540px) 80px, 110px"
-          width="185" height="278"
-          alt="{{ post.title }} poster" loading="lazy" decoding="async">
-      {%- else -%}
-        <img
-          src="{{ tmdb.poster | relative_url }}"
-          width="185" height="278"
-          alt="{{ post.title }} poster" loading="lazy" decoding="async">
-      {%- endif -%}
+      <img
+        src="{{ tmdb.poster | relative_url }}"
+        width="185" height="278"
+        alt="{{ post.title }} poster" loading="lazy" decoding="async"
+        style="width:110px; height:auto; object-fit:contain;">
     {%- else -%}
       <img src="{{ placeholder }}" width="185" height="278"
            alt="Poster not available" loading="lazy" decoding="async">
