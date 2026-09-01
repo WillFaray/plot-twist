@@ -32,11 +32,28 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Debug TMDB_API_KEY
+        run: |
+          if [ -z "$TMDB_API_KEY" ]; then
+            echo "TMDB_API_KEY is NOT set"
+          else
+            echo "TMDB_API_KEY is set (length: ${#TMDB_API_KEY})"
+          fi
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+      - name: List downloaded images
+        run: |
+          echo "=== Source images ==="
+          ls -la assets/images/movies/ 2>/dev/null || echo "No source images"
+          echo "=== _site images ==="
+          ls -la _site/assets/images/movies/ 2>/dev/null || echo "No _site images"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
