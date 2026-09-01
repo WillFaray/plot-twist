@@ -179,8 +179,11 @@ module PlotTwist
       return nil if id.nil? || id.to_s.empty?
 
       key = api_key(site)
+      Jekyll.logger.info "TMDB", "Enriching '#{post.data['title']}' (tmdb_id=#{id})"
+      Jekyll.logger.info "TMDB", "API key present: #{!key.nil? && !key.empty?} (length: #{key.to_s.length})"
+
       if key.nil? || key.empty?
-        Jekyll.logger.warn "TMDB", "No API key set; skipping enrichment for #{post.data['title']}"
+        Jekyll.logger.warn "TMDB", "No API key — skipping enrichment for #{post.data['title']}"
         return fallback_from_front_matter(post)
       end
 
@@ -274,13 +277,14 @@ module PlotTwist
       }
     end
 
-    # ---- Sync downloaded _sm images to the destination (_site) -----------------
+    # ---- Sync ALL downloaded movie images to the destination (_site) ------------
     #  Jekyll registers static files during its *read* phase and copies them to
-    #  _site during the *write* phase.  The pre_render hook above downloads
-    #  _sm images during the *render* phase — after static-file registration —
-    #  so those files never make it to _site.  This method manually copies them
-    #  so that templates (home page, movie listing, etc.) can reference them.
-    def self.sync_sm_to_dest(site)
+    #  _site during the *write* phase.  The pre_render hook downloads images
+    #  (both full-size and _sm variants) during the *render* phase — after
+    #  static-file registration — so those files never make it to _site.
+    #  This method manually copies ALL movie images so templates can reference
+    #  them.  It only copies files that are missing or have different sizes.
+    def self.sync_images_to_dest(site)
       src_dir = image_dir(site)
       return unless File.directory?(src_dir)
 
@@ -288,11 +292,12 @@ module PlotTwist
       dst_dir   = File.join(dest_root, "assets", "images", "movies")
       FileUtils.mkdir_p(dst_dir)
 
-      Dir.glob(File.join(src_dir, "*_sm.jpg")).each do |src|
+      Dir.glob(File.join(src_dir, "*.jpg")).each do |src|
         filename = File.basename(src)
         dst      = File.join(dst_dir, filename)
         next unless File.size?(src)
         next if File.exist?(dst) && File.size(dst) == File.size(src)
+        Jekyll.logger.info "TMDB", "Syncing #{filename} to _site (#{File.size(src)} bytes)"
         FileUtils.cp(src, dst)
         File.chmod(0o644, dst)
       end
@@ -304,6 +309,7 @@ end
 Jekyll::Hooks.register :posts, :pre_render do |post|
   next unless post.data["tmdb_id"]
   site = post.site
+  Jekyll.logger.info "TMDB", "Hook fired for '#{post.data['title']}' (tmdb_id=#{post.data['tmdb_id']})"
   post.data["tmdb"] = PlotTwist::TMDB.enrich(post, site)
-  PlotTwist::TMDB.sync_sm_to_dest(site)
+  PlotTwist::TMDB.sync_images_to_dest(site)
 end
