@@ -313,3 +313,16 @@ Jekyll::Hooks.register :posts, :pre_render do |post|
   post.data["tmdb"] = PlotTwist::TMDB.enrich(post, site)
   PlotTwist::TMDB.sync_images_to_dest(site)
 end
+
+# ---- Hook: re-sync images after Jekyll's write phase -----------------------
+#  Jekyll registers static files during the *read* phase and copies them to
+#  _site during the *write* phase.  The pre_render hook downloads images
+#  (both full-size and _sm variants) during the *render* phase — after
+#  static-file registration — and syncs them to _site.  But then Jekyll's
+#  write phase runs and overwrites _site with only the registered static
+#  files, deleting the _sm files.  This post_write hook re-syncs ALL movie
+#  images to _site after the write phase completes.
+Jekyll::Hooks.register :site, :post_write do |site|
+  Jekyll.logger.info "TMDB", "post_write hook: re-syncing all movie images to _site"
+  PlotTwist::TMDB.sync_images_to_dest(site)
+end
