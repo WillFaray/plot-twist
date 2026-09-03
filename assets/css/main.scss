@@ -168,15 +168,19 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 .brand:hover { color: #fff; opacity: 0.85; border-bottom: 0; }
 .brand-logo {
   display: block;
-  height: 30px;
+  height: 26px;
   width: auto;
+  opacity: 0.9; /* sit a little quieter on the dark bar */
 }
 @media (max-width: 760px) {
-  .brand-logo { height: 26px; }
+  .brand-logo { height: 22px; }
 }
 
 /* Top-level nav */
-.nav { margin-left: auto; }
+/* display:flex lets .nav-list stretch to the full header height so the
+   links can center vertically inside the bar (block-level .nav left the
+   list at its content height, pinned to the top of the header). */
+.nav { margin-left: auto; display: flex; }
 .nav-list {
   display: flex;
   align-items: stretch;
@@ -300,40 +304,49 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 }
 
 /* ---------- Hero ---------- */
-/* Home-page hero with a random movie backdrop behind the text.
-   main{} adds 2rem of top padding — the negative margin cancels it so
-   the backdrop sits flush under the header and runs edge-to-edge. */
+/* Home-page hero: a contained "cinema banner" (same width as the page
+   container) with a random movie backdrop behind the text. Keeping it
+   inside the content width avoids the extreme 16:9 crops of a
+   full-bleed strip, so the artwork stays recognizable. main{} adds 2rem
+   of top padding; the negative margin leaves a small gap under the
+   header instead of the full 2rem. */
 .hero {
   position: relative;
+  overflow: hidden;
+  width: min(100% - 2.5rem, var(--container));
+  margin: -1rem auto 2.5rem;
+  padding: 3rem 0;
   text-align: center;
-  padding: 4.5rem 0 3rem;
-  border-bottom: 1px solid var(--border);
-  margin: -2rem 0 2.5rem;
   color: #fff;
   background: var(--header-bg); /* fallback while/without a backdrop image */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  aspect-ratio: 21 / 9;
+  min-height: 240px; /* never crush the text on narrow screens */
 }
 .hero-backdrop {
   position: absolute;
   inset: 0;
   z-index: 0;
   background-size: cover;
-  background-position: center 35%;
+  background-position: center 40%;
   background-repeat: no-repeat;
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 .hero-backdrop.has-image { opacity: 1; }
 /* Bottom → top gradient: translucent black at the bottom (under the
-   text) fading to fully transparent at the top, revealing the image. */
+   text) fading to (almost) fully transparent at the top, revealing the
+   image. */
 .hero-backdrop::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.68) 0%,
-    rgba(0, 0, 0, 0.42) 45%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.5) 45%,
+    rgba(0, 0, 0, 0.05) 100%
   );
 }
 .hero > .container { position: relative; z-index: 1; }
@@ -355,6 +368,11 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 .hero .cta-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .hero { padding: 2.25rem 0; min-height: 260px; }
+  .hero h1 { font-size: 1.7rem; }
+  .hero p.lead { font-size: 1rem; }
+}
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -688,7 +706,7 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 
 @media print {
   .site-header, .site-footer, .pagination, .nav-toggle, .hero-backdrop { display: none; }
-  .hero { margin: 0; background: none; color: #000; }
+  .hero { width: auto; margin: 0; padding: 1rem 0; background: none; border: 0; color: #000; }
   .hero h1, .hero p.lead, .hero .byline { color: #000; text-shadow: none; }
   body { background: #fff; color: #000; }
 }
