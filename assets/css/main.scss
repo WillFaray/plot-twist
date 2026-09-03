@@ -155,7 +155,9 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   min-height: 60px;
 }
 
-/* Brand: the logo mark on the left (assets/images/logo.svg) */
+/* Brand: text wordmark on the left — "Plot" in white, "Twist" in the
+   orange from the logo artwork, set in a display serif (Playfair
+   Display) for a more stylized, film-journal look. */
 .brand {
   display: inline-flex; align-items: center;
   color: #fff;
@@ -166,15 +168,15 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   padding: 0.5rem 0;
 }
 .brand:hover { color: #fff; opacity: 0.85; border-bottom: 0; }
-.brand-logo {
-  display: block;
-  height: 26px;
-  width: auto;
-  opacity: 0.9; /* sit a little quieter on the dark bar */
+.brand .brand-name {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
 }
-@media (max-width: 760px) {
-  .brand-logo { height: 22px; }
-}
+.brand .brand-name span { color: #fdae3d; }
 
 /* Top-level nav */
 /* display:flex lets .nav-list stretch to the full header height so the
