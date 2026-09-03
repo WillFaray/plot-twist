@@ -3,7 +3,29 @@ layout: default
 ---
 {%- assign all_movies = site.posts | where_exp: "p", "p.layout == 'movie'" -%}
 
+{%- comment -%}
+  Collect every review backdrop that actually exists on disk (the TMDB
+  plugin only guarantees the files it downloaded / that were committed).
+  The first one is baked into the markup as a no-JS fallback; the small
+  script below then swaps in a random pick on each page load.
+{%- endcomment -%}
+{%- assign hero_backdrops = "" | split: "," -%}
+{%- for post in all_movies -%}
+  {%- assign b = post.tmdb.backdrop -%}
+  {%- if b and b != "" -%}
+    {%- assign burl = b | relative_url -%}
+    {%- assign hero_backdrops = hero_backdrops | push: burl -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <section class="hero">
+  <div
+    id="hero-backdrop"
+    class="hero-backdrop{% if hero_backdrops.size > 0 %} has-image{% endif %}"
+    aria-hidden="true"
+    data-backdrops='{{ hero_backdrops | jsonify }}'
+    {%- if hero_backdrops.size > 0 %} style="background-image:url('{{ hero_backdrops.first }}')"{% endif -%}
+  ></div>
   <div class="container">
     <h1>Movie reviews, <em>rewatched</em>.</h1>
     <p class="lead">
@@ -16,6 +38,24 @@ layout: default
     </p>
   </div>
 </section>
+
+<script>
+  // Pick a random movie backdrop for the hero on every page load.
+  (function () {
+    var el = document.getElementById('hero-backdrop');
+    if (!el) return;
+    var list;
+    try { list = JSON.parse(el.getAttribute('data-backdrops')) || []; } catch (e) { return; }
+    if (!list.length) return;
+    var pick = list[Math.floor(Math.random() * list.length)];
+    var img = new Image();
+    img.onload = function () {
+      el.style.backgroundImage = 'url("' + pick + '")';
+      el.classList.add('has-image');
+    };
+    img.src = pick;
+  })();
+</script>
 
 <div class="container">
   {%- if all_movies.size > 0 -%}

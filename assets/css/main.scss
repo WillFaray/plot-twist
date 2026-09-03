@@ -142,6 +142,7 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 */
 
 .site-header {
+  position: relative;   /* anchors the mobile .nav.open dropdown (top: 100%) to the header */
   background: var(--header-bg);
   color: #fff;
   border-bottom: 1px solid var(--header-border);
@@ -154,7 +155,7 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   min-height: 60px;
 }
 
-/* Brand: a simple text mark on the left */
+/* Brand: the logo mark on the left (assets/images/logo.svg) */
 .brand {
   display: inline-flex; align-items: center;
   color: #fff;
@@ -165,7 +166,14 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   padding: 0.5rem 0;
 }
 .brand:hover { color: #fff; opacity: 0.85; border-bottom: 0; }
-.brand .brand-name span { color: var(--accent); font-weight: 700; }
+.brand-logo {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+@media (max-width: 760px) {
+  .brand-logo { height: 26px; }
+}
 
 /* Top-level nav */
 .nav { margin-left: auto; }
@@ -177,8 +185,12 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   padding: 0;
   list-style: none;
 }
+/* Each item is a flex row so the link stretches the full header height
+   and its label stays vertically centered. (As plain list items the
+   inline-flex links sat on the text baseline and drifted to the top.) */
+.nav-list > li { display: flex; align-items: stretch; }
 .nav-list > li > a {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   height: 100%;
   padding: 0 1.1rem;
@@ -200,7 +212,7 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 /* Dropdown — bitcoin.org style: opens on hover, plain list of
    genre names. The caret is drawn with borders (not a text
    glyph) so it stays crisp at every font size. */
-.nav-dropdown { position: relative; display: flex; align-items: stretch; }
+.nav-dropdown { position: relative; }
 .nav-dropdown > a::after {
   content: "";
   display: inline-block;
@@ -288,14 +300,60 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 }
 
 /* ---------- Hero ---------- */
+/* Home-page hero with a random movie backdrop behind the text.
+   main{} adds 2rem of top padding — the negative margin cancels it so
+   the backdrop sits flush under the header and runs edge-to-edge. */
 .hero {
+  position: relative;
   text-align: center;
-  padding: 2.5rem 0 2rem;
+  padding: 4.5rem 0 3rem;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 2.5rem;
+  margin: -2rem 0 2.5rem;
+  color: #fff;
+  background: var(--header-bg); /* fallback while/without a backdrop image */
 }
-.hero h1 { font-size: 2.1rem; margin: 0 0 0.3em; }
-.hero p.lead { color: var(--fg-muted); max-width: 560px; margin: 0 auto 1.25em; font-size: 1.05rem; }
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.hero-backdrop.has-image { opacity: 1; }
+/* Bottom → top gradient: translucent black at the bottom (under the
+   text) fading to fully transparent at the top, revealing the image. */
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.68) 0%,
+    rgba(0, 0, 0, 0.42) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.hero > .container { position: relative; z-index: 1; }
+/* White text + a soft shadow keeps everything readable over any image */
+.hero h1 {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 28px rgba(0, 0, 0, 0.35);
+}
+.hero h1 em { color: #fdae3d; } /* logo orange */
+.hero p.lead {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  max-width: 560px;
+  margin: 0 auto 1.25em;
+  font-size: 1.05rem;
+}
+.hero .byline {
+  color: rgba(255, 255, 255, 0.68);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
 .hero .cta-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
 
 /* ---------- Buttons ---------- */
@@ -629,6 +687,8 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 .skip-link:focus { left: 0; }
 
 @media print {
-  .site-header, .site-footer, .pagination, .nav-toggle { display: none; }
+  .site-header, .site-footer, .pagination, .nav-toggle, .hero-backdrop { display: none; }
+  .hero { margin: 0; background: none; color: #000; }
+  .hero h1, .hero p.lead, .hero .byline { color: #000; text-shadow: none; }
   body { background: #fff; color: #000; }
 }
