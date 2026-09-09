@@ -1,11 +1,11 @@
 <footer class="site-footer">
   <div class="container">
-    <div>© {{ site.time | date: '%Y' }} {{ site.author.name | default: site.title }}. Movie reviews for the Instrumental English class.</div>
+    <div>© {{ site.time | date: '%Y' }} {{ site.author.name | default: site.title }}. Movie reviews for the Instrumental
+      English class.</div>
     <div>
       {%- if site.github_username -%}
-        <a href="https://github.com/{{ site.github_username }}" rel="noopener" target="_blank">GitHub</a>
+      <a href="https://github.com/WillFaray/plot-twist" rel="noopener" target="_blank">GitHub</a>
       {%- endif -%}
-      <a href="{{ '/shop/' | relative_url }}">Shop</a>
       <span class="text-muted"> · Built with Jekyll</span>
     </div>
   </div>

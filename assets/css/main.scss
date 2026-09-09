@@ -802,8 +802,21 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
 .shop-card .price {
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
   font-style: italic; font-weight: 700; font-size: 1.05rem;
-  color: var(--fg);
+  color: #fdae3d;
   font-variant-numeric: tabular-nums;
+  background: rgba(253, 174, 61, 0.1);
+  border: 1px solid rgba(253, 174, 61, 0.2);
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+.shop-card .price:hover {
+  background: rgba(253, 174, 61, 0.18);
+  border-color: rgba(253, 174, 61, 0.35);
+  box-shadow: 0 0 8px rgba(253, 174, 61, 0.2);
 }
 
 /* ---------- Utilities ---------- */
