@@ -44,6 +44,7 @@ Run `bundle exec jekyll serve` and your review is live at
 
 ## Credits
 
+- **Made by** Ícaro Barros and William Faray
 - Built with [Jekyll](https://jekyllrb.com/).
 - Movie metadata from [The Movie Database](https://www.themoviedb.org/).
   This product uses the TMDB API but is not endorsed or certified by TMDB.
