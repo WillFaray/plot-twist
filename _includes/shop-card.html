@@ -1,39 +1,39 @@
 {%- comment -%}
-  Reusable shop product card. Pass the product hash in `item`.
-  Expected keys: name, category, blurb, price, link,
-                 badge (optional), featured (optional), image (optional)
-  When `image` is missing the tile shows the product initials set in
-  Playfair Display italic — the same serif used by the brand wordmark —
-  so the shop stays fully self-contained (no external image URLs).
+Reusable shop product card. Pass the product hash in `item`.
+Expected keys: name, category, blurb, price, link,
+badge (optional), featured (optional), image (optional)
+When `image` is missing the tile shows the product initials set in
+Playfair Display italic — the same serif used by the brand wordmark —
+so the shop stays fully self-contained (no external image URLs).
 {%- endcomment -%}
 {%- assign it = include.item -%}
 {%- assign words = it.name | split: " " -%}
 {%- assign initials = "" -%}
 {%- if it.initials -%}
-  {%- assign initials = it.initials -%}
+{%- assign initials = it.initials -%}
 {%- else -%}
-  {%- for word in words limit: 2 -%}
-    {%- assign ch = word | slice: 0, 1 -%}
-    {%- if ch and ch != "—" and ch != "-" and ch != "" -%}
-      {%- assign initials = initials | append: ch -%}
-    {%- endif -%}
-  {%- endfor -%}
+{%- for word in words limit: 2 -%}
+{%- assign ch = word | slice: 0, 1 -%}
+{%- if ch and ch != "—" and ch != "-" and ch != "" -%}
+{%- assign initials = initials | append: ch -%}
+{%- endif -%}
+{%- endfor -%}
 {%- endif -%}
 {%- assign initials = initials | upcase -%}
 <article class="shop-card">
   <a class="tile" href="{{ it.link }}" rel="noopener noreferrer" target="_blank" aria-label="{{ it.name }}">
     {%- if it.image -%}
-      <img src="{{ it.image | relative_url }}" width="360" height="480"
-           alt="{{ it.name }}" loading="lazy" decoding="async">
+    <img src="{{ it.image | relative_url }}" width="360" height="480" alt="{{ it.name }}" loading="lazy"
+      decoding="async">
     {%- else -%}
-      <span class="tile-initials" aria-hidden="true">{{ initials }}</span>
-      <span class="tile-cat">{{ it.category }}</span>
+    <span class="tile-initials" aria-hidden="true">{{ initials }}</span>
+    <span class="tile-cat">{{ it.category }}</span>
     {%- endif -%}
     {%- if it.badge -%}
-      <span class="badge">{{ it.badge }}</span>
+    <span class="badge">{{ it.badge }}</span>
     {%- endif -%}
     {%- if it.featured -%}
-      <span class="badge badge-featured">✦ pick</span>
+    <span class="badge badge-featured">✦ pick</span>
     {%- endif -%}
   </a>
   <div class="body">
@@ -41,7 +41,7 @@
       <a href="{{ it.link }}" rel="noopener noreferrer" target="_blank">{{ it.name }}</a>
     </h3>
     {%- if it.blurb -%}
-      <p class="blurb">{{ it.blurb }}</p>
+    <p class="blurb">{{ it.blurb }}</p>
     {%- endif -%}
     <div class="footer">
       <span class="price">${{ it.price }}</span>

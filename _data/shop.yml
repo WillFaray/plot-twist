@@ -29,6 +29,7 @@ items:
     price: 300.00
     badge: "The wizard"
     link: https://willfaray.github.io/plot-twist/
+    image: /assets/images/shop/camisa.png
 
   - name: "Beautiful Popcorn Bucket"
     category: Experiences
@@ -38,34 +39,33 @@ items:
     price: 67.00
     badge: "Very very very beautiful" 
     link: https://willfaray.github.io/plot-twist/
+    image: /assets/images/shop/balde.png
 
-  - name: "Criterion Collection — 4K Restorations"
-    category: Physical Media
-    initials: CC
+  - name: "Retro Camera Vintage"
+    category: Physical Object
+    initials: RC
     blurb: >-
-      Remastered picture and sound with archival supplements —
-      the definitive way to own a film that matters.
+      Add timeless cinematic elegance to your space with this retro-style movie camera. Finished in sleek matte black, it features iconic dual film reels, detailed side dials, a classic lens hood, and a sturdy tripod mount.
     price: 119.95
     badge: "Collector's edition"
-    link: https://www.criterion.com/shop/browse/dvd-blu-ray
-    image: /assets/images/shop/criterion.jpg
+    link: https://willfaray.github.io/plot-twist/
+    image: /assets/images/shop/camera.png
 
-  - name: "Mondo — Limited Screen Print"
-    category: Posters & Art
-    initials: ML
+  - name: "Infinity Gauntlet"
+    category: Weapon
+    initials: IG
     blurb: >-
-      Alternative posters printed by hand on thick archival stock.
-      Small editions, numbered at the press. When they're gone,
-      they're gone.
-    price: 85.00
-    badge: "Hand-numbered"
-    link: https://mondoshop.com/collections/prints
+      Thanos' powerful weapon, now in your hand.
+    price: 616.00
+    badge: "We sell weapons?"
+    link: https://willfaray.github.io/plot-twist/
+    image: /assets/images/shop/manopla.png
 
-  - name: "Original Score — 180g Vinyl"
-    category: Soundtracks
+  - name: "Light Saber"
+    category: Brinquedo
     blurb: >-
-      The score on heavyweight vinyl, full-bleed gatefold art
-      included. Pressed for the shelf, made to be played.
+      A simple glow stick—it won't kill anyone, I guess...
     price: 39.00
-    badge: "180g pressing"
-    link: https://mondoshop.com/collections/vinyl
+    badge: "blue or red"
+    link: https://willfaray.github.io/plot-twist/
+    image: /assets/images/shop/sabre.png

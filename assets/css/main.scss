@@ -215,6 +215,33 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
   border-bottom: 0;
 }
 
+/* Featured Shop link in header */
+.nav-list > li > a.nav-shop-link {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  color: #fdae3d;
+  background: rgba(253, 174, 61, 0.08);
+  border: 1px solid rgba(253, 174, 61, 0.2);
+  border-radius: 18px;
+  padding: 0.25rem 0.95rem;
+  margin: auto 0.4rem;
+  height: 32px;
+  transition: all 0.2s ease;
+}
+.nav-list > li > a.nav-shop-link:hover {
+  color: #fff;
+  background: rgba(253, 174, 61, 0.22);
+  border-color: rgba(253, 174, 61, 0.45);
+  box-shadow: 0 0 8px rgba(253, 174, 61, 0.25);
+}
+.nav-list > li > a.nav-shop-link.active {
+  color: #fff;
+  background: rgba(253, 174, 61, 0.35);
+  border-color: rgba(253, 174, 61, 0.6);
+  box-shadow: 0 0 10px rgba(253, 174, 61, 0.35);
+}
+
 /* Dropdown — bitcoin.org style: opens on hover, plain list of
    genre names. The caret is drawn with borders (not a text
    glyph) so it stays crisp at every font size. */
@@ -291,6 +318,14 @@ main { flex: 1; padding: 2rem 0 3.5rem; }
     display: block;
     height: auto;
     padding: 0.85rem 1.25rem;
+  }
+  .nav.open .nav-list > li > a.nav-shop-link {
+    display: block;
+    height: auto;
+    margin: 0.6rem 1.25rem;
+    padding: 0.65rem 1.1rem;
+    text-align: center;
+    border-radius: 6px;
   }
   .nav.open .nav-dropdown { display: block; }
   /* hover dropdowns don't exist on touch screens: show the list inline */

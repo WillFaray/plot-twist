@@ -19,7 +19,7 @@
           </ul>
         </li>
         <li><a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>About</a></li>
-        <li><a href="{{ '/shop/' | relative_url }}" {% if page.url contains '/shop' %}class="active"{% endif %}>Shop</a></li>
+        <li><a href="{{ '/shop/' | relative_url }}" class="nav-shop-link{% if page.url contains '/shop' %} active{% endif %}">Shop</a></li>
       </ul>
     </nav>
     <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav" onclick="var n=document.getElementById('primary-nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o);">☰</button>
