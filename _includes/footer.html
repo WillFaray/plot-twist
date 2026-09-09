@@ -1,15 +1,12 @@
 <footer class="site-footer">
   <div class="container">
-    <div>© {{ site.time | date: '%Y' }} {{ site.author.name | default: site.title }}. Movie reviews for the Instrumental
+    <div>© {{ site.time | date: '%Y' }} Made by Ícaro Barros and William Faray. Movie reviews for the Instrumental
       English class.</div>
-    <div>
+    <div style="text-align: right;">
       {%- if site.github_username -%}
       <a href="https://github.com/WillFaray/plot-twist" rel="noopener" target="_blank">GitHub</a>
       {%- endif -%}
       <span class="text-muted"> · Built with Jekyll</span>
-    </div>
-    <div>
-      <span class="text-muted">Made by Ícaro Barros and William Faray</span>
     </div>
   </div>
 </footer>
