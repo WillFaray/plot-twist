@@ -16,6 +16,8 @@ Christopher Nolan builds a heist movie inside a dream inside a dream inside a dr
 - **Hans Zimmer's score.** That slowed-down Edith Piaf motif is doing more narrative work than most dialogue.
 - **Tom Hardy.** Every scene he's in gets better just by having him smirk at the camera.
 
+![](https://image.tmdb.org/t/p/original/delDni9pF5UG7tSmyXjcGGgUTCZ.jpg)
+
 ## What I struggled with
 
 The first twenty minutes are an exposition avalanche. Cobb explains dream rules to Ariadne who explains dream rules to us. It's necessary, but it's not elegant.
@@ -23,3 +25,5 @@ The first twenty minutes are an exposition avalanche. Cobb explains dream rules 
 ## Verdict
 
 A blockbuster that respects your intelligence and your attention span. The ending doesn't matter — the vertigo does.
+
+![](https://image.tmdb.org/t/p/original/28kKbSUvUz6P5RE1AuMJMO7IMfK.jpg)

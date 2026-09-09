@@ -13,6 +13,9 @@ Studio Ghibli is famous for refusing to talk down to children, and
 villain to defeat, no quest to complete, no lesson to underline. Chihiro
 simply has to behave — and survive — long enough to save her parents.
 
+![](https://image.tmdb.org/t/p/original/m4TUa2ciEWSlk37rOsjiSIvZDXE.jpg)
+
+
 ## The good
 
 The animation is the obvious draw, but the writing is the quiet miracle.
@@ -29,3 +32,5 @@ either lean into it or you reach for your phone.
 
 A film that trusts its audience completely. Five stars for the bathhouse
 scene alone.
+
+![](https://image.tmdb.org/t/p/original/ukfI9QkU1aIhOhKXYWE9n3z1mFR.jpg)

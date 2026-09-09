@@ -10,6 +10,8 @@ excerpt: "A meek Hobbit from the Shire and eight companions set out on a journey
 
 Peter Jackson's *The Fellowship of the Ring* is one of those rare adaptations that does not merely translate a beloved book to the screen but reimagines it as something equally valid in a different medium. Nearly twenty-five years later, it remains the gold standard for fantasy cinema.
 
+![](https://image.tmdb.org/t/p/original/zzIdXP769uYxQq6rK9plfeoVdTo.jpg)
+
 ## What I liked
 
 - **The practical effects.** Weta Workshop's prosthetics, miniatures, and forced-perspective work give the film a tactile reality that pure CGI still struggles to match. The Balrog is a digital effect, but it works because it is surrounded by physical detail.
@@ -24,3 +26,5 @@ Peter Jackson's *The Fellowship of the Ring* is one of those rare adaptations th
 ## Final thoughts
 
 A landmark of popular cinema that treats its source material with love but not reverence. The ring is destroyed in the third film, but the journey begins here, and it still feels like the start of something enormous.
+
+![](https://image.tmdb.org/t/p/original/vRQnzOn4HjIMX4LBq9nHhFXbsSu.jpg)

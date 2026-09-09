@@ -16,6 +16,8 @@ It is almost boring to call *The Dark Knight* the best superhero movie ever made
 - **The IMAX photography.** Nolan committed to large-format photography for entire sequences, and the result has a weight and clarity that digital intermediates still struggle to match.
 - **The moral architecture.** Every set piece is also an ethical test. The ferry sequence is the obvious example, but even the opening bank heist is a lesson in mutual assured destruction.
 
+![](https://image.tmdb.org/t/p/original/nMKdUUepR0i5zn0y1T4CsSB5chy.jpg)
+
 ## What could be better
 
 - The third-act Rachel/Dawes love triangle resolution feels rushed, a casualty of the film's ambition.
@@ -24,3 +26,5 @@ It is almost boring to call *The Dark Knight* the best superhero movie ever made
 ## Final thoughts
 
 A blockbuster that trusts its audience to sit with discomfort. The Joker wins the argument; Batman just survives it. That tension is why the film endures.
+
+![](https://image.tmdb.org/t/p/original/MrcrBJVmjledZEDkagLTFcG0tR.jpg)

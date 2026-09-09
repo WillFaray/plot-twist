@@ -1,0 +1,22 @@
+---
+layout: default
+---
+{%- assign items = site.data.shop.items | default: nil -%}
+<div class="container">
+  <header class="page-head">
+    <h1>{{ page.title | default: "Shop" }}</h1>
+    <p class="text-muted">
+      {{ site.data.shop.note | default: "A small, curated shelf of film-adjacent things worth owning." }}
+    </p>
+  </header>
+
+  {%- if items and items.size > 0 -%}
+    <ul class="shop-grid" role="list">
+      {%- for item in items -%}
+        <li>{% include shop-card.html item=item %}</li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <p class="text-muted">The shelf is being restocked — check back soon.</p>
+  {%- endif -%}
+</div>
