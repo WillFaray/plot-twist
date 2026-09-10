@@ -11,7 +11,7 @@ layout: default
   </header>
 
   {%- if items and items.size > 0 -%}
-    <ul class="shop-grid" role="list">
+    <ul class="shop-list" role="list">
       {%- for item in items -%}
         <li>{% include shop-card.html item=item %}</li>
       {%- endfor -%}
@@ -20,3 +20,18 @@ layout: default
     <p class="text-muted">The shelf is being restocked — check back soon.</p>
   {%- endif -%}
 </div>
+
+<style>
+  .shop-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .shop-list li {
+    margin: 0;
+  }
+</style>
