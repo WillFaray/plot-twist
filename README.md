@@ -28,6 +28,34 @@ Each review combines a personal text with visual and informational details about
 - Markdown
 - The Movie Database API
 
+## Run Locally
+
+Install the Ruby dependencies and start the development server:
+
+```sh
+bundle install
+bundle exec jekyll serve
+```
+
+The site will be available at `http://localhost:4000/plot-twist/`.
+
+TMDB metadata is optional for a basic build. To enrich reviews with fresh
+metadata and download artwork, copy `.env.example` to `.env` and set
+`TMDB_API_KEY`. The `.env` file is ignored by Git and must never be committed.
+
+To create a production build without starting the server:
+
+```sh
+JEKYLL_ENV=production bundle exec jekyll build
+```
+
+## Deploy
+
+The workflow in `.github/workflows/jekyll.yml` deploys the `main` branch to
+GitHub Pages. Configure the repository secret `TMDB_API_KEY` if the automated
+build should fetch movie metadata and artwork. The site can still build without
+that secret by using the information and assets already present in the repo.
+
 ## Project Structure
 
 - `_posts/` contains the movie reviews
@@ -36,6 +64,10 @@ Each review combines a personal text with visual and informational details about
 - `_plugins/` handles movie metadata and generated pages
 - `assets/css/` contains the site's styles
 - `assets/images/movies/` contains movie artwork
+- `_data/shop.yml` contains the demonstration shop catalogue
+
+Generated folders such as `_site/`, `.jekyll-cache/` and `.sass-cache/` are
+local build artifacts and are intentionally ignored by Git.
 
 ## Credits
 
