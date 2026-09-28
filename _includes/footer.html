@@ -16,12 +16,12 @@
 <script>
   const themeToggle = document.getElementById('theme-toggle');
   const html = document.documentElement;
-  
+
   // Load saved theme preference or use system preference
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = localStorage.getItem('pt-theme');
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const initialTheme = savedTheme || (systemDark ? 'dark' : 'light');
-  
+
   // Apply initial theme
   if (initialTheme === 'dark') {
     html.setAttribute('data-theme', 'dark');
@@ -30,19 +30,19 @@
     html.removeAttribute('data-theme');
     themeToggle.textContent = '🌙';
   }
-  
+
   // Toggle theme on button click
   themeToggle.addEventListener('click', () => {
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
+
     if (newTheme === 'dark') {
       html.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
+      localStorage.setItem('pt-theme', 'dark');
       themeToggle.textContent = '☀️';
     } else {
       html.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
+      localStorage.setItem('pt-theme', 'light');
       themeToggle.textContent = '🌙';
     }
   });
@@ -59,11 +59,11 @@
     display: inline-block;
     transition: transform 0.2s ease;
   }
-  
+
   .theme-toggle:hover {
     transform: scale(1.2);
   }
-  
+
   .theme-toggle:active {
     transform: scale(0.95);
   }

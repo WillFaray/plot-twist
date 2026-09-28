@@ -65,6 +65,7 @@ module PlotTwist
 
     # ---- HTTP with disk cache ------------------------------------------------
     def self.fetch_json(site, url)
+      safe_target = url.to_s.split("?", 2).first
       cache_dir = cache_root(site)
       FileUtils.mkdir_p(cache_dir)
       cache_key = Digest::SHA1.hexdigest(url)
@@ -85,14 +86,14 @@ module PlotTwist
       res = http.request(req)
 
       unless res.is_a?(Net::HTTPSuccess)
-        Jekyll.logger.warn "TMDB", "HTTP #{res.code} for #{url}"
+        Jekyll.logger.warn "TMDB", "HTTP #{res.code} for #{safe_target}"
         return nil
       end
 
       File.write(cache_file, res.body)
       JSON.parse(res.body)
     rescue StandardError => e
-      Jekyll.logger.warn "TMDB", "fetch failed for #{url}: #{e.class}: #{e.message}"
+      Jekyll.logger.warn "TMDB", "fetch failed for #{safe_target}: #{e.class}: #{e.message}"
       nil
     end
 

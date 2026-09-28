@@ -21,51 +21,47 @@ note: >-
   A small, curated shelf of film-adjacent things worth owning.
 
 items:
-  - name: "Hulk vs Avengers"
-    category: Clothing
-    initials: HT
+  - name: "Vintage Film Projector"
+    category: Home Cinema
+    initials: VP
     blurb: >-
-      A classic shirt representing the good old days.
-    price: 300.00
-    badge: "The wizard"
+      A compact vintage-style projector that adds a classic cinema atmosphere to a living room or screening space.
+    price: 149.90
+    badge: "Cinema classic"
     link: https://willfaray.github.io/plot-twist/
-    image: /assets/images/shop/camisa.png
 
-  - name: "Beautiful Popcorn Bucket"
-    category: Experiences
-    initials: BP
+  - name: "Studio Tripod"
+    category: Film Equipment
+    initials: ST
     blurb: >-
-      An amazing collector's item that lets you eat amazing popcorn and watch amazing movies.
-    price: 67.00
-    badge: "Very very very beautiful" 
+      A sturdy adjustable tripod for cameras, lighting equipment, and small film productions.
+    price: 89.00
+    badge: "For filmmakers"
     link: https://willfaray.github.io/plot-twist/
-    image: /assets/images/shop/balde.png
 
-  - name: "Retro Camera Vintage"
-    category: Physical Object
+  - name: "Vintage Film Camera Decor"
+    category: Home Decor
     initials: RC
     blurb: >-
-      Add timeless cinematic elegance to your space with this retro-style movie camera. Finished in sleek matte black, it features iconic dual film reels, detailed side dials, a classic lens hood, and a sturdy tripod mount.
-    price: 119.95
+      A retro-style camera ornament with classic reels and metal details, made for a shelf, desk, or home cinema.
+    price: 79.95
     badge: "Collector's edition"
     link: https://willfaray.github.io/plot-twist/
-    image: /assets/images/shop/camera.png
 
-  - name: "Infinity Gauntlet"
-    category: Weapon
+  - name: "Cinema Poster Set"
+    category: Wall Art
     initials: IG
     blurb: >-
-      Thanos' powerful weapon, now in your hand.
-    price: 616.00
-    badge: "We sell weapons?"
+      A set of three archival-quality prints celebrating iconic film genres, ready to frame and display.
+    price: 32.00
+    badge: "Staff pick"
     link: https://willfaray.github.io/plot-twist/
-    image: /assets/images/shop/manopla.png
 
-  - name: "Light Saber"
-    category: Brinquedo
+  - name: "Director's Clapperboard"
+    category: Desk Accessories
+    initials: DC
     blurb: >-
-      A simple glow stick—it won't kill anyone, I guess...
-    price: 39.00
-    badge: "blue or red"
+      A practical wooden clapperboard for film students, creators, and anyone who enjoys a cinematic workspace.
+    price: 21.50
+    badge: "For filmmakers"
     link: https://willfaray.github.io/plot-twist/
-    image: /assets/images/shop/sabre.png

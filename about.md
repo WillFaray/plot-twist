@@ -48,4 +48,6 @@ Run `bundle exec jekyll serve` and your review is live at
 - Built with [Jekyll](https://jekyllrb.com/).
 - Movie metadata from [The Movie Database](https://www.themoviedb.org/).
   This product uses the TMDB API but is not endorsed or certified by TMDB.
-- Fonts: [Inter](https://rsms.me/inter/).
+- Fonts: [Source Sans Pro](https://fonts.google.com/specimen/Source+Sans+Pro),
+  [Playfair Display](https://fonts.google.com/specimen/Playfair+Display) and
+  [Source Code Pro](https://fonts.google.com/specimen/Source+Code+Pro).
